@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<head>
+  <title>Home Central</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  {# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> #}
+
+  <style>
+    .btn-dark{
+        background-color:black;
+        color:white;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+    }
+    body {
+      display: flex;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="d-grid gap-2 col-9 mx-auto" role="group", style="margin:auto;">
+    {% for key, value in tiles.items(): %}
+      {% if value is mapping: %}
+        {% for subkey, subvalue in value.items(): %}
+          <a class="btn btn-secondary" href={{ subvalue }}>{{ key }}:{{subkey}}</a>
+        {% endfor %}
+      {% else: %}
+        <a class="btn btn-primary" href={{ value }}>{{ key }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</body>
+</html>
