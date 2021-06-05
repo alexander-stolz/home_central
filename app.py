@@ -23,6 +23,7 @@ def mainpage():
         musik=dict(
             pop=url_for('music', genre='pop'),
             tropical_house=url_for('music', genre='tropical_house'),
+            off=url_for('music', genre='off'),
         ),
         ender=url_for('ender'),
     )
@@ -44,7 +45,10 @@ def music(genre):
     global browser
     browser = browser or webdriver.Chrome()
     try:
-        browser.get(choice(playlists[genre]))
+        if genre == 'off':
+            browser.get('about:blank')
+        else:
+            browser.get(choice(playlists[genre]))
     except:
         browser = None
         return redirect(url_for('music', genre=genre))
