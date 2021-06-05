@@ -26,11 +26,20 @@
 
 <body>
 
-  <div class="d-grid gap-2 col-9 mx-auto" role="group", style="margin:auto;">
+  <div class="d-grid gap-2 col-9 mx-auto" role="group" style="margin:auto;">
     {% for key, value in tiles.items(): %}
       {% if value is mapping: %}
         {% for subkey, subvalue in value.items(): %}
-          <a class="btn btn-secondary" href={{ subvalue }}>{{ key }}:{{subkey}}</a>
+          {% if subvalue is mapping: %}
+            <div class="btn-group" role="group" aria-label={{subkey}}>
+              <a class="btn btn-info" href="#">{{subkey}}</a>
+              {% for subsubkey, subsubvalue in subvalue.items(): %}
+                <a class="btn btn-secondary" href={{ subsubvalue }}>{{subsubkey}}</a>
+              {% endfor %}
+            </div>
+          {% else: %}
+            <a class="btn btn-secondary" href={{ subvalue }}>{{ key }} : {{subkey}}</a>
+          {% endif %}
         {% endfor %}
       {% else: %}
         <a class="btn btn-primary" href={{ value }}>{{ key }}</a>

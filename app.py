@@ -17,13 +17,15 @@ playlists = json.load(open('playlists.json'))
 def mainpage():
     tiles = dict(
         prismatik=dict(
-            farbe=url_for('set_prismatik_profile', name='colour'),
-            normal=url_for('set_prismatik_profile', name='normal'),
+            prismatik=dict(
+                farbe=url_for('set_prismatik_profile', name='colour'),
+                normal=url_for('set_prismatik_profile', name='normal'),
+            ),
         ),
         musik=dict(
             pop=url_for('music', genre='pop'),
             tropical_house=url_for('music', genre='tropical_house'),
-            off=url_for('music', genre='off'),
+            off=url_for('music', genre='off')
         ),
         ender=url_for('ender'),
     )
