@@ -102,12 +102,12 @@ def airmouse():
         elif touches == 1:
             mouse.move(dx * 5, dy * 5)
         elif touches == 2:
-            if abs(dx) > abs(dy) * 3:
+            if abs(dx) > 2 > abs(dy) * 1:
                 mouse.scroll(dx, 0)
-            elif abs(dy) > abs(dx) * 3:
+            elif abs(dy) > .3 > abs(dx) * 1:
                 mouse.scroll(0, dy)
-            else:
-                mouse.scroll(dx, dy)
+            # else:
+            #     mouse.scroll(dx, dy)
         return (
             json.dumps({'success':True}),
             200,
