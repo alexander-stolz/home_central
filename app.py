@@ -32,8 +32,7 @@ def mainpage():
         musik=dict(
             musik=dict(
                 __default=url_for('music_more'),
-                pop=url_for('music', genre='pop'),
-                tropical_house=url_for('music', genre='tropical_house'),
+                random=url_for('music', genre='random'),
                 off=url_for('music', genre='off')
             )
         ),
@@ -75,9 +74,19 @@ def music(genre:str=None):
     try:
         if genre == 'off':
             browser.get('about:blank')
+        elif genre == 'random':
+            _pl = []
+            while len(_pl) == 0:
+                _genre = choice(tuple(playlists.keys()))
+                # print(_genre)
+                _pl = playlists[_genre]
+                # print(_pl)
+            _pl = choice(playlists[_genre])
+            browser.get(_pl)
         elif genre:
             browser.get(choice(playlists[genre]))
-    except:
+    except Exception:
+        print(e)
         browser = None
         return redirect(url_for('music', genre=genre))
     return redirect(url_for('mainpage'))
