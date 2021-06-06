@@ -72,7 +72,7 @@ function handleTouchMove(evt) {
     var x_diff = x_new - x_old;
     var y_diff = y_new - y_old;
 
-    $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff}));
+    $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff, touches: evt.touches.length}));
 };
 
 </script>

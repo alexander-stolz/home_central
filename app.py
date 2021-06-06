@@ -93,14 +93,16 @@ def volume(volume:str=None):
 def airmouse():
     if request.method == 'POST':
         res = json.loads(request.get_data())
-        dx, dy = res['x'], res['y']
+        dx, dy, touches = res['x'], res['y'], res['touches']
         if dx == dy == 0:
-            if res['touches'] == 0:
+            if touches == 0:
                 mouse.click(Button.left)
-            elif res['touches'] == 1:
+            elif touches == 1:
                 mouse.click(Button.right)
-        if 'touches' not in res:
+        elif touches == 1:
             mouse.move(dx * 5, dy * 5)
+        elif touches == 2:
+            mouse.scroll(dx, dy)
         return (
             json.dumps({'success':True}),
             200,
