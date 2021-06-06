@@ -94,10 +94,13 @@ def airmouse():
     if request.method == 'POST':
         res = json.loads(request.get_data())
         dx, dy = res['x'], res['y']
-        # print(dx, dy)
         if dx == dy == 0:
-            mouse.click(Button.left)
-        mouse.move(dx * 5, dy * 5)
+            if res['touches'] == 0:
+                mouse.click(Button.left)
+            elif res['touches'] == 1:
+                mouse.click(Button.right)
+        if 'touches' not in res:
+            mouse.move(dx * 5, dy * 5)
         return (
             json.dumps({'success':True}),
             200,
