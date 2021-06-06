@@ -41,8 +41,14 @@ def mainpage():
             lauter=url_for('volume', volume='+'),
           ),
         ),
+        ender=dict(
+            ender=dict(
+                home=url_for('ender', cmd='home'),
+                up=url_for('ender', cmd='move_up'),
+                cancel=url_for('ender', cmd='cancel'),
+            ),
+        ),
         air_mouse=url_for('airmouse'),
-        # ender=url_for('ender'),
     )
     return render_template('index.jinja2', tiles=tiles)
 
@@ -121,8 +127,15 @@ def airmouse_move():
     return None
 
 
-@app.route('/ender')
-def ender():
+@app.route('/ender/<cmd>')
+def ender(cmd):
+    import ender
+    if cmd == 'cancel':
+        ender.cancel()
+    elif cmd == 'move_up':
+        ender.send_gcode('G1 Z100')
+    elif cmd == 'home':
+        ender.send_gcode('G28')
     return redirect(url_for('mainpage'))
 
 # python -m pipenv run flask run
