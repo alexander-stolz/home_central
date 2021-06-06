@@ -46,29 +46,31 @@ function round(x) {
 };
 
 function handleTouchStart(evt) {
-    x_down = evt.touches[0].clientX;
-    y_down = evt.touches[0].clientY;
+    x_old = evt.touches[0].clientX;
+    y_old = evt.touches[0].clientY;
+    x_new = x_old;
+    y_new = y_old;
 };
 
 function handleTouchEnd(evt) {
-    x_down = null;
-    y_down = null;
+    $.post("/airmouse", JSON.stringify({x: x_new - x_old, y: y_new - y_old}));
+    x_old = null;
+    y_old = null;
 };
 
 function handleTouchMove(evt) {
     evt.preventDefault();
-    if ( ! x_down || ! y_down ) {
+    if ( ! x_old || ! y_old ) {
         return;
     }
+    x_old = x_new;
+    y_old = y_new;
 
-    var x_up = evt.touches[0].clientX;
-    var y_up = evt.touches[0].clientY;
+    x_new = evt.touches[0].clientX;
+    y_new = evt.touches[0].clientY;
 
-    var x_diff = x_down - x_up;
-    var y_diff = y_down - y_up;
-
-    x_down = x_up;
-    y_down = y_up;
+    var x_diff = x_new - x_old;
+    var y_diff = y_new - y_old;
 
     $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff}));
 };

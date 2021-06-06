@@ -93,7 +93,16 @@ def volume(volume:str=None):
 def airmouse():
     if request.method == 'POST':
         res = json.loads(request.get_data())
-        mouse.move(-res['x']*5, -res['y']*5)
+        dx, dy = res['x'], res['y']
+        # print(dx, dy)
+        if dx == dy == 0:
+            mouse.click(Button.left)
+        mouse.move(dx * 5, dy * 5)
+        return (
+            json.dumps({'success':True}),
+            200,
+            {'ContentType':'application/json'}
+        )
     return render_template('airmouse.html')
 
 
