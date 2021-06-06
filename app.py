@@ -30,9 +30,12 @@ def mainpage():
             ),
         ),
         musik=dict(
-            pop=url_for('music', genre='pop'),
-            tropical_house=url_for('music', genre='tropical_house'),
-            off=url_for('music', genre='off')
+            musik=dict(
+                __default=url_for('music_more'),
+                pop=url_for('music', genre='pop'),
+                tropical_house=url_for('music', genre='tropical_house'),
+                off=url_for('music', genre='off')
+            )
         ),
         volume=dict(
           vol=dict(
@@ -43,6 +46,7 @@ def mainpage():
         ),
         ender=dict(
             ender=dict(
+                __default=url_for('ender_more'),
                 home=url_for('ender', cmd='home'),
                 up=url_for('ender', cmd='move_up'),
                 cancel=url_for('ender', cmd='cancel'),
@@ -77,6 +81,19 @@ def music(genre:str=None):
         browser = None
         return redirect(url_for('music', genre=genre))
     return redirect(url_for('mainpage'))
+
+
+@app.route('/music')
+def music_more():
+    tiles = dict(
+        back=url_for('mainpage'),
+        pop=url_for('music', genre='pop'),
+        tropical_house=url_for('music', genre='tropical_house'),
+        chill=url_for('music', genre='chill'),
+        electroswing=url_for('music', genre='electroswing'),
+        off=url_for('music', genre='off')
+    )
+    return render_template('index.jinja2', tiles=tiles)
 
 
 @app.route('/volume/<volume>')
@@ -122,11 +139,6 @@ def airmouse():
     return render_template('airmouse.html')
 
 
-@app.route('/airmouse/move')
-def airmouse_move():
-    return None
-
-
 @app.route('/ender/<cmd>')
 def ender(cmd):
     import ender
@@ -137,6 +149,34 @@ def ender(cmd):
     elif cmd == 'home':
         ender.send_gcode('G28')
     return redirect(url_for('mainpage'))
+
+
+@app.route('/ender')
+def ender_more():
+    tiles = dict(
+        back=url_for('mainpage'),
+        control=dict(
+            control=dict(
+                cancel=url_for('ender', cmd='cancel'),
+                pause=url_for('ender', cmd='pause'),
+                up=url_for('ender', cmd='move_up'),
+            ),
+        ),
+        bed=dict(
+            bed=dict(
+                heat=url_for('ender', cmd='bed_heat'),
+                off=url_for('ender', cmd='bed_off'),
+            )
+        ),
+        tool=dict(
+            tool=dict(
+                heat=url_for('ender', cmd='tool_heat'),
+                off=url_for('ender', cmd='tool_off'),
+            ),
+        )
+    )
+    return render_template('index.jinja2', tiles=tiles)
+
 
 # python -m pipenv run flask run
 if __name__ == '__main__':
