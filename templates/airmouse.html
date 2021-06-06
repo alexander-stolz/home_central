@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+  <title>Air Mouse - Home Central</title>
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  {# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> #}
+
+  <style>
+    .dot {
+      width: 2px;
+      height: 2px;
+      background-color: white;
+      position: absolute;
+    }
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+    }
+    body {
+      display: flex;
+      background-color: #222233;
+    }
+  </style>
+</head>
+
+<body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+
+window.onload = function() {
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove, {passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
+    // {# setInterval(game, 1000 / 15); #}
+}
+
+function round(x) {
+    return parseInt(Math.round(x / 10) * 10);
+};
+
+function handleTouchStart(evt) {
+    x_down = evt.touches[0].clientX;
+    y_down = evt.touches[0].clientY;
+};
+
+function handleTouchEnd(evt) {
+    x_down = null;
+    y_down = null;
+};
+
+function handleTouchMove(evt) {
+    evt.preventDefault();
+    if ( ! x_down || ! y_down ) {
+        return;
+    }
+
+    var x_up = evt.touches[0].clientX;
+    var y_up = evt.touches[0].clientY;
+
+    var x_diff = x_down - x_up;
+    var y_diff = y_down - y_up;
+
+    x_down = x_up;
+    y_down = y_up;
+
+    $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff}));
+};
+
+</script>
+
+</body>
+</html>

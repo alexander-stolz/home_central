@@ -20,6 +20,7 @@
     }
     body {
       display: flex;
+      background-color: #222233;
     }
   </style>
 </head>
@@ -32,17 +33,17 @@
         {% for subkey, subvalue in value.items(): %}
           {% if subvalue is mapping: %}
             <div class="btn-group" role="group" aria-label={{subkey}}>
-              <a class="btn btn-info" href="#">{{subkey}}</a>
+              <a class="btn btn-info" href={{subvalue.pop('__default', '#')}}>{{subkey.replace('_', ' ').strip()}}</a>
               {% for subsubkey, subsubvalue in subvalue.items(): %}
-                <a class="btn btn-secondary" href={{ subsubvalue }}>{{subsubkey}}</a>
+                <a class="btn btn-secondary" href={{ subsubvalue }}>{{subsubkey.replace('_', ' ').strip()}}</a>
               {% endfor %}
             </div>
           {% else: %}
-            <a class="btn btn-secondary" href={{ subvalue }}>{{ key }} : {{subkey}}</a>
+            <a class="btn btn-secondary" href={{ subvalue }}>{{ key }} : {{subkey.replace('_', ' ').strip()}}</a>
           {% endif %}
         {% endfor %}
       {% else: %}
-        <a class="btn btn-primary" href={{ value }}>{{ key }}</a>
+        <a class="btn btn-primary" href={{ value }}>{{ key.replace('_', ' ').strip() }}</a>
       {% endif %}
     {% endfor %}
   </div>

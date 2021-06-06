@@ -7,9 +7,15 @@ import telnetlib
 from selenium import webdriver
 import json
 from random import choice
+import pynput
+from pynput.keyboard import Key
+from pynput.mouse import Button
+# https://pypi.org/project/pynput/
 
 app = Flask(__name__)
 browser = None
+keyboard = pynput.keyboard.Controller()
+mouse = pynput.mouse.Controller()
 
 playlists = json.load(open('playlists.json'))
 
@@ -18,6 +24,7 @@ def mainpage():
     tiles = dict(
         prismatik=dict(
             prismatik=dict(
+                __default='#',
                 farbe=url_for('set_prismatik_profile', name='colour'),
                 normal=url_for('set_prismatik_profile', name='normal'),
             ),
@@ -27,7 +34,15 @@ def mainpage():
             tropical_house=url_for('music', genre='tropical_house'),
             off=url_for('music', genre='off')
         ),
-        ender=url_for('ender'),
+        volume=dict(
+          vol=dict(
+            __default=url_for('volume', volume='toggle_mute'),
+            leiser=url_for('volume', volume='-'),
+            lauter=url_for('volume', volume='+'),
+          ),
+        ),
+        air_mouse=url_for('airmouse'),
+        # ender=url_for('ender'),
     )
     return render_template('index.jinja2', tiles=tiles)
 
@@ -43,18 +58,48 @@ def set_prismatik_profile(name='colour'):
 
 
 @app.route('/music/<genre>')
-def music(genre):
+def music(genre:str=None):
+    # no default
     global browser
     browser = browser or webdriver.Chrome()
     try:
         if genre == 'off':
             browser.get('about:blank')
-        else:
+        elif genre:
             browser.get(choice(playlists[genre]))
     except:
         browser = None
         return redirect(url_for('music', genre=genre))
     return redirect(url_for('mainpage'))
+
+
+@app.route('/volume/<volume>')
+def volume(volume:str=None):
+    # default = toggle mute
+    if volume == '+':
+        keyboard.press(Key.media_volume_up)
+        keyboard.release(Key.media_volume_up)
+    elif volume == '-':
+        keyboard.press(Key.media_volume_down)
+        keyboard.release(Key.media_volume_down)
+    else:
+        # toggle
+        keyboard.press(Key.media_volume_mute)
+        keyboard.release(Key.media_volume_mute)
+    return redirect(url_for('mainpage'))
+
+
+@app.route('/airmouse', methods=['GET', 'POST'])
+def airmouse():
+    if request.method == 'POST':
+        res = json.loads(request.get_data())
+        mouse.move(-res['x']*5, -res['y']*5)
+    return render_template('airmouse.html')
+
+
+@app.route('/airmouse/move')
+def airmouse_move():
+    return None
 
 
 @app.route('/ender')
@@ -63,4 +108,4 @@ def ender():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 5000, debug=True)
+    app.run('0.0.0.0', 5000, debug=False)
