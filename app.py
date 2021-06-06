@@ -120,6 +120,6 @@ def airmouse_move():
 def ender():
     return redirect(url_for('mainpage'))
 
-
-if __name__ == '__main__':
-    app.run('0.0.0.0', 5000, debug=False)
+# pythonw -m pipenv run flask run
+# if __name__ == '__main__':
+    # app.run('0.0.0.0', 5000, debug=False)
