@@ -127,22 +127,22 @@ def airmouse():
     def mouse_blocked():
         return time.perf_counter() < blocked_until
 
-    if request.method == 'POST' and not mouse_blocked():
+    if request.method == 'POST':
         res = json.loads(request.get_data())
         dx, dy, touches = res['x'], res['y'], res['touches']
-        if dx == dy == 0:
+        if dx == dy == 0 and not mouse_blocked():
             if touches == 0:
                 mouse.click(Button.left)
             elif touches == 1:
                 mouse.click(Button.right)
-        elif touches == 1:
+        elif touches == 1 and not mouse_blocked():
             mouse.move(dx * 5, dy * 5)
         elif touches == 2:
             if abs(dx) > 2 > abs(dy) * 1:
                 mouse.scroll(dx, 0)
-            elif abs(dy) > .3 > abs(dx) * 1:
+            elif abs(dy) > abs(dx) * 1:
                 mouse.scroll(0, dy / 3)
-            block_mouse(dt=.1)
+            block_mouse(dt=.3)
             # else:
             #     mouse.scroll(dx, dy)
         return (
