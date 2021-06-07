@@ -16,8 +16,10 @@ app = Flask(__name__)
 browser = None
 keyboard = pynput.keyboard.Controller()
 mouse = pynput.mouse.Controller()
+blocked_until = 0
 
 playlists = json.load(open('playlists.json'))
+
 
 @app.route('/')
 def mainpage():
@@ -75,17 +77,12 @@ def music(genre:str=None):
         if genre == 'off':
             browser.get('about:blank')
         elif genre == 'random':
-            _pl = []
-            while len(_pl) == 0:
-                _genre = choice(tuple(playlists.keys()))
-                # print(_genre)
-                _pl = playlists[_genre]
-                # print(_pl)
+            _genre = choice(tuple(playlists.keys()))
             _pl = choice(playlists[_genre])
             browser.get(_pl)
         elif genre:
             browser.get(choice(playlists[genre]))
-    except Exception:
+    except Exception as e:
         print(e)
         browser = None
         return redirect(url_for('music', genre=genre))
@@ -123,7 +120,14 @@ def volume(volume:str=None):
 
 @app.route('/airmouse', methods=['GET', 'POST'])
 def airmouse():
-    if request.method == 'POST':
+    def block_mouse(dt):
+        global blocked_until
+        blocked_until = time.perf_counter() + dt
+
+    def mouse_blocked():
+        return time.perf_counter() < blocked_until
+
+    if request.method == 'POST' and not mouse_blocked():
         res = json.loads(request.get_data())
         dx, dy, touches = res['x'], res['y'], res['touches']
         if dx == dy == 0:
@@ -137,7 +141,8 @@ def airmouse():
             if abs(dx) > 2 > abs(dy) * 1:
                 mouse.scroll(dx, 0)
             elif abs(dy) > .3 > abs(dx) * 1:
-                mouse.scroll(0, dy)
+                mouse.scroll(0, dy / 3)
+            block_mouse(dt=.1)
             # else:
             #     mouse.scroll(dx, dy)
         return (

@@ -33,7 +33,13 @@
         {% for subkey, subvalue in value.items(): %}
           {% if subvalue is mapping: %}
             <div class="btn-group" role="group" aria-label={{subkey}}>
-              <a class="btn btn-info" href={{subvalue.pop('__default', '#')}}>{{subkey.replace('_', ' ').strip()}}</a>
+              {# variable auslagern, falls die buttons spaeter anders aussehen sollen #}
+              {%- set subvalue_href = subvalue.pop('__default', '#') %}
+              {% if subvalue_href == '#': %}
+                <a class="btn btn-info" href={{subvalue_href}}>{{subkey.replace('_', ' ').strip()}}</a>
+              {% else: %}
+                <a class="btn btn-info" href={{subvalue_href}}>{{subkey.replace('_', ' ').strip()}}</a>
+              {% endif %}
               {% for subsubkey, subsubvalue in subvalue.items(): %}
                 <a class="btn btn-secondary" href={{ subsubvalue }}>{{subsubkey.replace('_', ' ').strip()}}</a>
               {% endfor %}
