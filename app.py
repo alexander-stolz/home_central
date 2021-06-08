@@ -106,11 +106,13 @@ def music_more():
 def volume(volume:str=None):
     # default = toggle mute
     if volume == '+':
-        keyboard.press(Key.media_volume_up)
-        keyboard.release(Key.media_volume_up)
+        for _ in range(2):
+            keyboard.press(Key.media_volume_up)
+            keyboard.release(Key.media_volume_up)
     elif volume == '-':
-        keyboard.press(Key.media_volume_down)
-        keyboard.release(Key.media_volume_down)
+        for _ in range(2):
+            keyboard.press(Key.media_volume_down)
+            keyboard.release(Key.media_volume_down)
     else:
         # toggle
         keyboard.press(Key.media_volume_mute)
