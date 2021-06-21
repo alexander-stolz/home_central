@@ -130,7 +130,11 @@ def volume(volume:str=None):
 def airmouse_keyboard():
     if not request.form.get('del'):
         text = request.form.get('text')
-        keyboard.type(text)
+        if text:
+            keyboard.type(text)
+        else:
+            keyboard.press(Key.enter)
+            keyboard.release(Key.enter)
     else:
         keyboard.press(Key.backspace)
         keyboard.release(Key.backspace)
