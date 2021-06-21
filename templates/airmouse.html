@@ -5,17 +5,20 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-  {# <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> #}
 
   <style>
-    .dot {
-      width: 2px;
-      height: 2px;
-      background-color: white;
+    .btn-group {
       position: absolute;
+      bottom: 0;
     }
-    html, body {
+    .input-group {
+      position: absolute;
+      bottom: 0;
+    }
+    /* .touchme {
+      border: 1px dotted red;
+    } */
+    html, body, .box, .touchme {
       height: 100%;
       width: 100%;
       margin: 0;
@@ -29,53 +32,68 @@
 
 <body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
-
-
-window.onload = function() {
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchmove', handleTouchMove, {passive: false });
-    window.addEventListener('touchend', handleTouchEnd);
-    // {# setInterval(game, 1000 / 15); #}
-}
-
-function round(x) {
-    return parseInt(Math.round(x / 10) * 10);
-};
-
-function handleTouchStart(evt) {
-    x_old = evt.touches[0].clientX;
-    y_old = evt.touches[0].clientY;
-    x_new = x_old;
-    y_new = y_old;
-};
-
-function handleTouchEnd(evt) {
-    $.post("/airmouse", JSON.stringify({x: x_new - x_old, y: y_new - y_old, touches: evt.touches.length}));
-    x_old = null;
-    y_old = null;
-};
-
-function handleTouchMove(evt) {
-    evt.preventDefault();
-    if ( ! x_old || ! y_old ) {
-        return;
+  <div class="box">
+    <div id="toucharea" class="touchme"></div>
+    <div class="footer">
+      <form action="/airmouse/keyboard" method="post">
+        <div class="input-group">
+            <input type="text" name="text" autocomplete="off" class="form-control" placeholder="type text here">
+            <input type="submit" class="btn btn-primary" value="send">
+            <input type="submit" name="del" class="btn btn-secondary" value="del">
+        </div>
+      </form>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    window.onload = function() {
+      toucharea.addEventListener('touchstart', handleTouchStart);
+      toucharea.addEventListener('touchmove', handleTouchMove, {passive: false });
+      toucharea.addEventListener('touchend', handleTouchEnd);
     }
-    x_old = x_new;
-    y_old = y_new;
 
-    x_new = evt.touches[0].clientX;
-    y_new = evt.touches[0].clientY;
+    function round(x) {
+        return parseInt(Math.round(x / 10) * 10);
+    };
 
-    var x_diff = x_new - x_old;
-    var y_diff = y_new - y_old;
+    function handleTouchStart(evt) {
+        x_old = evt.touches[0].clientX;
+        y_old = evt.touches[0].clientY;
+        x_new = x_old;
+        y_new = y_old;
+    };
 
-    $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff, touches: evt.touches.length}));
-};
+    function handleTouchEnd(evt) {
+        $.post(
+          "/airmouse",
+          JSON.stringify({
+            x: x_new - x_old,
+            y: y_new - y_old,
+            touches: evt.touches.length,
+          })
+        );
+        x_old = null;
+        y_old = null;
+    };
 
-</script>
+    function handleTouchMove(evt) {
+        evt.preventDefault();
+        if ( ! x_old || ! y_old ) {
+            return;
+        }
+        x_old = x_new;
+        y_old = y_new;
 
+        x_new = evt.touches[0].clientX;
+        y_new = evt.touches[0].clientY;
+
+        var x_diff = x_new - x_old;
+        var y_diff = y_new - y_old;
+
+        $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff, touches: evt.touches.length}));
+    };
+  </script>
 </body>
 </html>
+
+<!-- https://getbootstrap.com/docs/4.2/components/forms/ -->

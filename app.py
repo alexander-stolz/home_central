@@ -1,4 +1,5 @@
 import time
+from types import SimpleNamespace
 from flask import Flask, request
 from flask.helpers import url_for
 from flask.templating import Environment, render_template
@@ -19,6 +20,10 @@ mouse = pynput.mouse.Controller()
 blocked_until = 0
 
 playlists = json.load(open('playlists.json'))
+templates = SimpleNamespace(
+    scaffold='scaffold.jinja2',
+    airmouse='airmouse.html'
+)
 
 
 @app.route('/')
@@ -55,7 +60,7 @@ def mainpage():
         ),
         air_mouse=url_for('airmouse'),
     )
-    return render_template('index.jinja2', tiles=tiles)
+    return render_template(templates.scaffold, tiles=tiles)
 
 
 @app.route('/prismatik/profile/<name>')
@@ -99,7 +104,7 @@ def music_more():
         electroswing=url_for('music', genre='electroswing'),
         off=url_for('music', genre='off')
     )
-    return render_template('index.jinja2', tiles=tiles)
+    return render_template(templates.scaffold, tiles=tiles)
 
 
 @app.route('/volume/<volume>')
@@ -119,6 +124,16 @@ def volume(volume:str=None):
         keyboard.release(Key.media_volume_mute)
     return redirect(url_for('mainpage'))
 
+
+@app.route('/airmouse/keyboard', methods=['POST'])
+def airmouse_keyboard():
+    if not request.form.get('del'):
+        text = request.form.get('text')
+        keyboard.type(text)
+    else:
+        keyboard.press(Key.backspace)
+        keyboard.release(Key.backspace)
+    return render_template(templates.airmouse)
 
 @app.route('/airmouse', methods=['GET', 'POST'])
 def airmouse():
@@ -152,7 +167,7 @@ def airmouse():
             200,
             {'ContentType':'application/json'}
         )
-    return render_template('airmouse.html')
+    return render_template(templates.airmouse)
 
 
 @app.route('/ender/<cmd>')
@@ -164,6 +179,8 @@ def ender(cmd):
         ender.send_gcode('G1 Z100')
     elif cmd == 'home':
         ender.send_gcode('G28')
+    else:
+        return cmd + ' not yet implemented'
     return redirect(url_for('mainpage'))
 
 
@@ -191,7 +208,7 @@ def ender_more():
             ),
         )
     )
-    return render_template('index.jinja2', tiles=tiles)
+    return render_template(templates.scaffold, tiles=tiles)
 
 
 # python -m pipenv run flask run
