@@ -59,6 +59,7 @@ def mainpage():
             ),
         ),
         air_mouse=url_for('airmouse'),
+        shutdown=url_for('shutdown'),
     )
     return render_template(templates.scaffold, tiles=tiles)
 
@@ -209,6 +210,13 @@ def ender_more():
         )
     )
     return render_template(templates.scaffold, tiles=tiles)
+
+
+@app.route('/shutdown')
+def shutdown():
+    import os
+    os.system('shutdown -s -t 00')
+
 
 
 # python -m pipenv run flask run
