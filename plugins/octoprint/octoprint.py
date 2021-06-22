@@ -13,7 +13,7 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 log.setLevel(logging.INFO)
 
-api_key = load_config(open('config.json'))['apikey']
+api_key = load_config(open('plugins/ender/config.json'))['apikey']
 # url = 'http://ender.local/api/'
 url = 'http://192.168.1.105/api/'
 
@@ -92,7 +92,10 @@ def close():
     session.close()
 
 
-sts = status()
-print(sts['state']['text'])
-print('bed:', sts['temperature']['bed'])
-print('tool:', sts['temperature']['tool0'])
+try:
+    sts = status()
+    print(sts['state']['text'])
+    print('bed:', sts['temperature']['bed'])
+    print('tool:', sts['temperature']['tool0'])
+except TypeError:
+    print('printer not connected')
