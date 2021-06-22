@@ -35,16 +35,42 @@
   <div class="box">
     <div id="toucharea" class="touchme"></div>
     <div class="footer">
-      <form action="/airmouse/keyboard" method="post">
+      <form action="/airmouse" method="post" id="textInputForm">
         <div class="input-group">
-            <input type="text" name="text" autocomplete="off" class="form-control" placeholder="type text here">
-            <input type="submit" class="btn btn-primary" value="send">
-            <input type="submit" name="del" class="btn btn-secondary" value="del">
+            <input type="text" id="txt" name="text" autocomplete="off" class="form-control" placeholder="type text here">
+            <input type="submit" id="enter" name="enter" class="btn btn-primary" value="send">
+            <input type="submit" id = "del" name="del" class="btn btn-secondary" value="del">
         </div>
       </form>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $("#textInputForm").submit(function(e) {
+      e.preventDefault();
+    });
+
+    $("#enter").on("click", function() {
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "enter",
+          text: document.getElementById("txt").value
+        }),
+        window.location.reload()
+      );
+    });
+
+    $("#del").on("click", function() {
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "del"
+        }),
+        window.location.reload()
+      );
+    });
+  </script>
   <script>
     window.onload = function() {
       toucharea.addEventListener('touchstart', handleTouchStart);
@@ -67,6 +93,7 @@
         $.post(
           "/airmouse",
           JSON.stringify({
+            type: "touch",
             x: x_new - x_old,
             y: y_new - y_old,
             touches: evt.touches.length,
@@ -90,7 +117,12 @@
         var x_diff = x_new - x_old;
         var y_diff = y_new - y_old;
 
-        $.post("/airmouse", JSON.stringify({x: x_diff, y: y_diff, touches: evt.touches.length}));
+        $.post("/airmouse", JSON.stringify({
+          type: "touch",
+          x: x_diff,
+          y: y_diff,
+          touches: evt.touches.length
+        }));
     };
   </script>
 </body>

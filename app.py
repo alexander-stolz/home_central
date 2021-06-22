@@ -29,6 +29,7 @@ templates = SimpleNamespace(
 @app.route('/')
 def mainpage():
     tiles = dict(
+        air_mouse=url_for('airmouse'),
         prismatik=dict(
             prismatik=dict(
                 __default='#',
@@ -58,8 +59,12 @@ def mainpage():
                 cancel=url_for('ender', cmd='cancel'),
             ),
         ),
-        air_mouse=url_for('airmouse'),
-        shutdown=url_for('shutdown'),
+        system=dict(
+            system=dict(
+                shutdown=url_for('system', cmd='shutdown'),
+                cancel=url_for('system', cmd='cancel')
+            ),
+        ),
     )
     return render_template(templates.scaffold, tiles=tiles)
 
@@ -126,20 +131,6 @@ def volume(volume:str=None):
     return redirect(url_for('mainpage'))
 
 
-@app.route('/airmouse/keyboard', methods=['POST'])
-def airmouse_keyboard():
-    if not request.form.get('del'):
-        text = request.form.get('text')
-        if text:
-            keyboard.type(text)
-        else:
-            keyboard.press(Key.enter)
-            keyboard.release(Key.enter)
-    else:
-        keyboard.press(Key.backspace)
-        keyboard.release(Key.backspace)
-    return render_template(templates.airmouse)
-
 @app.route('/airmouse', methods=['GET', 'POST'])
 def airmouse():
     def block_mouse(dt):
@@ -151,22 +142,33 @@ def airmouse():
 
     if request.method == 'POST':
         res = json.loads(request.get_data())
-        dx, dy, touches = res['x'], res['y'], res['touches']
-        if dx == dy == 0 and not mouse_blocked():
-            if touches == 0:
-                mouse.click(Button.left)
-            elif touches == 1:
-                mouse.click(Button.right)
-        elif touches == 1 and not mouse_blocked():
-            mouse.move(dx * 5, dy * 5)
-        elif touches == 2:
-            if abs(dx) > 2 > abs(dy) * 1:
-                mouse.scroll(dx, 0)
-            elif abs(dy) > abs(dx) * 1:
-                mouse.scroll(0, dy / 3)
-            block_mouse(dt=.3)
-            # else:
-            #     mouse.scroll(dx, dy)
+        if res.get('type') == 'enter':
+            text = res.get('text')
+            if text:
+                keyboard.type(text)
+            else:
+                keyboard.press(Key.enter)
+                keyboard.release(Key.enter)
+        elif res.get('type') == 'del':
+            keyboard.press(Key.backspace)
+            keyboard.release(Key.backspace)
+        else:
+            dx, dy, touches = res['x'], res['y'], res['touches']
+            if dx == dy == 0 and not mouse_blocked():
+                if touches == 0:
+                    mouse.click(Button.left)
+                elif touches == 1:
+                    mouse.click(Button.right)
+            elif touches == 1 and not mouse_blocked():
+                mouse.move(dx * 5, dy * 5)
+            elif touches == 2:
+                if abs(dx) > 2 > abs(dy) * 1:
+                    mouse.scroll(dx, 0)
+                elif abs(dy) > abs(dx) * 1:
+                    mouse.scroll(0, dy / 3)
+                block_mouse(dt=.3)
+                # else:
+                #     mouse.scroll(dx, dy)
         return (
             json.dumps({'success':True}),
             200,
@@ -216,11 +218,14 @@ def ender_more():
     return render_template(templates.scaffold, tiles=tiles)
 
 
-@app.route('/shutdown')
-def shutdown():
+@app.route('/system/<cmd>')
+def system(cmd):
     import os
-    os.system('shutdown -s -t 00')
-
+    if cmd == 'shutdown':
+        os.system('shutdown -s -t 10')
+    elif cmd == 'cancel':
+        os.system('shutdown -a')
+    return redirect(url_for('mainpage'))
 
 
 # python -m pipenv run flask run
