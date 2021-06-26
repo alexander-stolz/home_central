@@ -5,6 +5,7 @@ from werkzeug.utils import redirect
 from selenium import webdriver
 import json
 from random import choice
+import time
 
 browser = None
 playlists = json.load(open('plugins/music/playlists.json'))
@@ -16,28 +17,57 @@ tile = f"""dict(
             musik=dict(
                 __default=url_for('{plugin_name}.music_more'),
                 random=url_for('{plugin_name}.music', genre='random'),
+                next=url_for('{plugin_name}.music', genre='next'),
                 off=url_for('{plugin_name}.music', genre='off')
             )
         )"""
 
+x_path_menu = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-browse-response/div[2]/ytmusic-detail-header-renderer/div/ytmusic-menu-renderer/tp-yt-paper-icon-button/tp-yt-iron-icon'
+x_path_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdown/div/ytmusic-menu-popup-renderer/tp-yt-paper-listbox/ytmusic-menu-navigation-item-renderer[1]/a/yt-formatted-string'
+x_path_playpause = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar/div[1]/div/tp-yt-paper-icon-button[2]/tp-yt-iron-icon'
+x_path_next = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar/div[1]/div/tp-yt-paper-icon-button[3]/tp-yt-iron-icon'
+
 @bp.route('/music/<genre>')
 def music(genre:str=None):
-    # no default
     global browser
+    if browser:
+        try:
+            browser.execute_script("window.onbeforeunload = null;")
+            browser.execute_script("window.alert = null;")
+            browser.find_element_by_xpath(x_path_playpause).click()
+        except:
+            pass
     browser = browser or webdriver.Chrome()
-    try:
-        if genre == 'off':
-            browser.get('about:blank')
-        elif genre == 'random':
-            _genre = choice(tuple(playlists.keys()))
-            _pl = choice(playlists[_genre])
-            browser.get(_pl)
-        elif genre:
-            browser.get(choice(playlists[genre]))
-    except Exception as e:
-        print(e)
-        browser = None
-        return redirect(url_for(f'{plugin_name}.music', genre=genre))
+    if genre == 'next':
+        try:
+            browser.find_element_by_xpath(x_path_next).click()
+        except:
+            pass
+    elif genre == 'off':
+        browser.get('about:blank')
+    elif genre:
+        try:
+            if genre == 'random':
+                _genre = choice(tuple(playlists.keys()))
+                _pl = choice(playlists[_genre])
+                browser.get(_pl)
+            else:
+                browser.get(choice(playlists[genre]))
+            time.sleep(2)
+            browser.find_element_by_xpath(x_path_menu).click()
+            browser.find_element_by_xpath(x_path_radio).click()
+        except Exception as e:
+            print(e)
+            try:
+                time.sleep(5)
+                browser.find_element_by_xpath(x_path_menu).click()
+                browser.find_element_by_xpath(x_path_radio).click()
+            except Exception as e:
+                print(e)
+                browser.close()
+                del browser
+                browser = None
+                return redirect(url_for(f'{plugin_name}.music', genre=genre))
     return redirect(url_for('mainpage'))
 
 
