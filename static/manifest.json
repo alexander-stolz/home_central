@@ -1,0 +1,41 @@
+{
+    "short_name": "HomeCentral",
+    "name": "HomeCentral",
+    "icons": [
+        {
+            "src": "/static/favicon.svg"
+        },
+        {
+            "src": "/static/icon128.png",
+            "type": "image/png",
+            "sizes": "128x128"
+        },
+        {
+            "src": "/static/icon192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/static/icon196.png",
+            "type": "image/png",
+            "sizes": "196x196"
+        },
+        {
+            "src": "/static/icon512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "shortcuts": [
+        {
+            "name": "airmouse",
+            "short_name": "airmouse",
+            "url": "/airmouse"
+        }
+    ]
+}
