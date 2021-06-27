@@ -14,7 +14,10 @@ bp = Blueprint(plugin_name, __name__)
 tile = f"""dict(
             licht=dict(
                 __default=url_for('{plugin_name}.licht_more'),
-                toggle_all=url_for('{plugin_name}.licht', bulb='all'),
+                _1=url_for(f'{plugin_name}.licht', bulb='wohnzimmer'),
+                _2=url_for(f'{plugin_name}.licht', bulb='flur'),
+                _3=url_for(f'{plugin_name}.licht', bulb='schlafzimmer'),
+                all=url_for('{plugin_name}.licht', bulb='all'),
             )
         )"""
 
