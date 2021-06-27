@@ -9,8 +9,9 @@ app = Flask(__name__)
 
 _plugins = [
     'airmouse',
-    'volume',
     'music',
+    'volume',
+    'lights',
     'prismatik',
     'octoprint',
     'system'
