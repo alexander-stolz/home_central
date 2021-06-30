@@ -64,7 +64,10 @@ def music(genre:str=None):
                 browser.find_element_by_xpath(x_path_radio).click()
             except Exception as e:
                 print(e)
-                browser.close()
+                try:
+                    browser.close()
+                except:
+                    pass
                 del browser
                 browser = None
                 return redirect(url_for(f'{plugin_name}.music', genre=genre))
