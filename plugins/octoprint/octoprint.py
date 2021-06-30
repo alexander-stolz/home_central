@@ -13,7 +13,7 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 log.setLevel(logging.INFO)
 
-with open('plugins/ender/config.json') as config_file:
+with open('plugins/octoprint/config.json') as config_file:
     config = load_config(config_file)
     api_key = config['apikey']
     url = config.get('url') or 'http://ender.local/api/'
