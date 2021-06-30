@@ -8,6 +8,7 @@ flask = "*"
 selenium = "*"
 pynput = "*"
 requests = "*"
+speedtest = "*"
 
 [dev-packages]
 
