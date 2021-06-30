@@ -1,7 +1,8 @@
-from flask import Blueprint
+from flask import Blueprint, flash
 from flask.helpers import url_for
 from flask.templating import render_template
 from werkzeug.utils import redirect
+from importlib import reload
 
 plugin_name = 'ender'
 bp = Blueprint(plugin_name, __name__)
@@ -17,25 +18,37 @@ tile = f"""dict(
 
 @bp.route('/ender/<cmd>')
 def ender(cmd):
-    from . import octoprint
-    if cmd == 'cancel':
-        octoprint.cancel()
-    elif cmd == 'pause_resume':
-        octoprint.pause_resume()
-    elif cmd == 'move_up':
-        octoprint.send_gcode('G1 Z100')
-    elif cmd == 'home':
-        octoprint.send_gcode('G28')
-    elif cmd == 'bed_heat':
-        octoprint.heat_bed(65)
-    elif cmd == 'bed_off':
-        octoprint.heat_bed(0)
-    elif cmd == 'tool_heat':
-        octoprint.heat_extruder(215)
-    elif cmd == 'tool_off':
-        octoprint.heat_extruder(0)
-    else:
-        return cmd + ' not yet implemented'
+    try:
+        from . import octoprint
+    except OSError:
+        flash('octoprint is not reachable')
+        return redirect(url_for('mainpage'))
+    except Exception as e:
+        flash(e)
+        return redirect(url_for('mainpage'))
+    try:
+        if cmd == 'cancel':
+            octoprint.cancel()
+        elif cmd == 'pause_resume':
+            octoprint.pause_resume()
+        elif cmd == 'move_up':
+            octoprint.send_gcode('G1 Z100')
+        elif cmd == 'home':
+            octoprint.send_gcode('G28')
+        elif cmd == 'bed_heat':
+            octoprint.heat_bed(65)
+        elif cmd == 'bed_off':
+            octoprint.heat_bed(0)
+        elif cmd == 'tool_heat':
+            octoprint.heat_extruder(215)
+        elif cmd == 'tool_off':
+            octoprint.heat_extruder(0)
+        else:
+            return cmd + ' not yet implemented'
+    except Exception as e:
+        print(e)
+        print('reloading octoprint')
+        reload(octoprint)
     return redirect(url_for('mainpage'))
 
 

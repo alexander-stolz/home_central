@@ -35,11 +35,24 @@
       background-color: #222233;
     }
   </style>
+
 </head>
 
 <body>
 
   <div class="d-grid gap-2 col-9 mx-auto" role="group" style="margin:auto;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+          {% for message in messages %}
+              <div>{{ message }}</div>
+          {% endfor %}
+          <div>
+            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary btn-sm">dismiss</a>
+          </div>
+        </div>
+      {% endif %}
+    {% endwith %}
     {% for key, value in tiles.items(): %}
       {% if value is mapping: %}
         {% for subkey, subvalue in value.items(): %}
