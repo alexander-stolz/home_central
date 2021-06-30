@@ -9,6 +9,7 @@ selenium = "*"
 pynput = "*"
 requests = "*"
 speedtest-cli = "*"
+websocket = "*"
 
 [dev-packages]
 
