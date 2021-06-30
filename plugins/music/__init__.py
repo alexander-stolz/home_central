@@ -77,7 +77,7 @@ def music(genre:str=None):
 @bp.route('/music')
 def music_more():
     tiles = dict(
-        back=url_for('mainpage'),
+        # back=url_for('mainpage'),
         pop=url_for(f'{plugin_name}.music', genre='pop'),
         tropical_house=url_for(f'{plugin_name}.music', genre='tropical_house'),
         chill=url_for(f'{plugin_name}.music', genre='chill'),
