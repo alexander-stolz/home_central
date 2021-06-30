@@ -16,7 +16,7 @@ log.setLevel(logging.INFO)
 with open('plugins/ender/config.json') as config_file:
     config = load_config(config_file)
     api_key = config['apikey']
-    url = config['url']
+    url = config.get('url') or 'http://ender.local/api/'
 
 session = requests.Session()
 session.headers.update({'X-Api-Key': api_key,
