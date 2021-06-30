@@ -13,9 +13,10 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 log.setLevel(logging.INFO)
 
-api_key = load_config(open('plugins/ender/config.json'))['apikey']
-# url = 'http://ender.local/api/'
-url = 'http://192.168.1.105/api/'
+with open('plugins/ender/config.json') as config_file:
+    config = load_config(config_file)
+    api_key = config['apikey']
+    url = config['url']
 
 session = requests.Session()
 session.headers.update({'X-Api-Key': api_key,

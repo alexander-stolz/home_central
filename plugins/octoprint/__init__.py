@@ -20,10 +20,20 @@ def ender(cmd):
     from . import octoprint
     if cmd == 'cancel':
         octoprint.cancel()
+    elif cmd == 'pause_resume':
+        octoprint.pause_resume()
     elif cmd == 'move_up':
         octoprint.send_gcode('G1 Z100')
     elif cmd == 'home':
         octoprint.send_gcode('G28')
+    elif cmd == 'bed_heat':
+        octoprint.heat_bed(65)
+    elif cmd == 'bed_off':
+        octoprint.heat_bed(0)
+    elif cmd == 'tool_heat':
+        octoprint.heat_extruder(215)
+    elif cmd == 'tool_off':
+        octoprint.heat_extruder(0)
     else:
         return cmd + ' not yet implemented'
     return redirect(url_for('mainpage'))
@@ -36,7 +46,7 @@ def ender_more():
         control=dict(
             control=dict(
                 cancel=url_for(f'{plugin_name}.ender', cmd='cancel'),
-                pause=url_for(f'{plugin_name}.ender', cmd='pause'),
+                pause=url_for(f'{plugin_name}.ender', cmd='pause_resume'),
                 up=url_for(f'{plugin_name}.ender', cmd='move_up'),
             ),
         ),
