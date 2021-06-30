@@ -9,7 +9,7 @@ selenium = "*"
 pynput = "*"
 requests = "*"
 speedtest-cli = "*"
-websocket = "*"
+sonoff-python = "*"
 
 [dev-packages]
 
