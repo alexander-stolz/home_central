@@ -1,3 +1,0 @@
-import speedtest
-
-speedtest
