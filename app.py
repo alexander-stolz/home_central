@@ -1,3 +1,4 @@
+import json
 from types import SimpleNamespace
 from typing import OrderedDict
 from flask import Flask
@@ -7,19 +8,12 @@ from importlib import import_module
 
 app = Flask(__name__)
 
-_plugins = [
-    'airmouse',
-    'music',
-    'volume',
-    'lights',
-    'prismatik',
-    'octoprint',
-    'system'
-]
+with open('config.json') as config_file:
+    config = json.load(config_file)
 
 # register plugins
 modules = []
-for plugin in _plugins:
+for plugin in config.get('plugins', []):
     p = import_module(f'plugins.{plugin}')
     app.register_blueprint(p.bp)
     modules.append(p)
@@ -33,5 +27,5 @@ def mainpage():
 
 # python -m pipenv run flask run
 if __name__ == '__main__':
-    app.secret_key = 'super secret key'
-    app.run('0.0.0.0', 5000, debug=False)
+    app.secret_key = config.get('secret_key', '1234')
+    app.run('0.0.0.0', 5000, debug=config.get('debug', False))

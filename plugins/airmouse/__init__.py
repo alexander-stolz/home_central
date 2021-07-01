@@ -39,6 +39,18 @@ def airmouse():
         elif res.get('type') == 'del':
             keyboard.press(Key.backspace)
             keyboard.release(Key.backspace)
+        elif res.get('type') == 'left':
+            keyboard.press(Key.left)
+            keyboard.release(Key.left)
+        elif res.get('type') == 'space':
+            keyboard.press(Key.space)
+            keyboard.release(Key.space)
+        elif res.get('type') == 'f':
+            keyboard.press('f')
+            keyboard.release('f')
+        elif res.get('type') == 'right':
+            keyboard.press(Key.right)
+            keyboard.release(Key.right)
         else:
             dx, dy, touches = res['x'], res['y'], res['touches']
             if dx == dy == 0 and not mouse_blocked():

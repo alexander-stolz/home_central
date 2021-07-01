@@ -41,23 +41,6 @@
 <body>
 
   <div class="d-grid gap-2 col-9 mx-auto" role="group" style="margin:auto;">
-    {% with messages = get_flashed_messages() %}
-      {% if messages|length > 1 or messages[0]|length > 30: %}
-          <div class="alert alert-secondary py-2" role="alert">
-            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
-            {% for message in messages %}
-                <div>{{ message }}</div>
-            {% endfor %}
-          </div>
-      {% elif messages|length == 1: %}
-          <div class="alert alert-secondary py-2" role="alert">
-            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
-            {% for message in messages %}
-                {{ message }}
-            {% endfor %}
-          </div>
-      {% endif %}
-    {% endwith %}
     {% for key, value in tiles.items(): %}
       {% if value is mapping: %}
         {% for subkey, subvalue in value.items(): %}
@@ -82,6 +65,24 @@
         <a class="btn btn-primary" href="{{ value }}">{{ key.replace('_', ' ').strip() }}</a>
       {% endif %}
     {% endfor %}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages|length > 1 or messages[0]|length > 30: %}
+          <div class="alert alert-secondary py-2" role="alert">
+            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+          </div>
+      {% elif messages|length == 1: %}
+          <div class="alert alert-secondary py-2" role="alert">
+            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+          </div>
+      {% endif %}
+    {% endwith %}
   </div>
 
 </body>

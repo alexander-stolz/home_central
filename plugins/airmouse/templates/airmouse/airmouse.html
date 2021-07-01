@@ -15,6 +15,9 @@
       position: absolute;
       bottom: 0;
     }
+    input {
+      text-align: center;
+    }
     /* .touchme {
       border: 1px dotted red;
     } */
@@ -37,9 +40,13 @@
     <div class="footer">
       <form action="/airmouse" method="post" id="textInputForm">
         <div class="input-group">
-            <input type="text" id="txt" name="text" autocomplete="off" class="form-control" placeholder="type text here">
-            <input type="submit" id="enter" name="enter" class="btn btn-primary" value="send">
-            <input type="submit" id = "del" name="del" class="btn btn-secondary" value="del">
+          <input type="submit" id="left" class="btn btn-primary" value="&lt;">
+          <input type="submit" id="space" class="btn btn-primary" value="_">
+          <input type="submit" id="f" class="btn btn-primary" value="f">
+          <input type="submit" id="right" class="btn btn-primary" value="&gt;">
+          <input type="text" id="txt" autocomplete="off" class="form-control" placeholder="type text here">
+          <input type="submit" id="enter" class="btn btn-primary" value="send">
+          <input type="submit" id = "del" class="btn btn-secondary" value="del">
         </div>
       </form>
     </div>
@@ -66,6 +73,46 @@
         "/airmouse",
         JSON.stringify({
           type: "del"
+        }),
+        window.location.reload()
+      );
+    });
+
+    $("#left").on("click", function() {
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "left"
+        }),
+        window.location.reload()
+      );
+    });
+
+    $("#space").on("click", function() {
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "space"
+        }),
+        window.location.reload()
+      );
+    });
+
+    $("#f").on("click", function() {
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "f"
+        }),
+        window.location.reload()
+      );
+    });
+
+    $("#right").on("click", function() {
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "right"
         }),
         window.location.reload()
       );
