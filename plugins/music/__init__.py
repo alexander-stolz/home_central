@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, flash
 from flask.helpers import url_for
 from flask.templating import render_template
 from werkzeug.utils import redirect
@@ -42,9 +42,12 @@ def music(genre:str=None):
         try:
             browser.find_element_by_xpath(x_path_next).click()
         except:
-            pass
+            flash('music: next failed')
     elif genre == 'off':
-        browser.get('about:blank')
+        try:
+            browser.get('about:blank')
+        except:
+            flash('music: off failed')
     elif genre:
         try:
             if genre == 'random':
@@ -70,6 +73,7 @@ def music(genre:str=None):
                     pass
                 del browser
                 browser = None
+                print('starte chrome neu')
                 return redirect(url_for(f'{plugin_name}.music', genre=genre))
     return redirect(url_for('mainpage'))
 

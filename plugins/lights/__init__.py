@@ -38,7 +38,6 @@ s_device_ids = {d['name']:d.get('deviceid') for d in s_connection.get_devices()}
 s_devices = {name:s_connection.get_device(dev_id) for name, dev_id in s_device_ids.items()}
 y_devices = {name:Bulb(ip) for name, ip in _y_bulbs.items()}
 
-
 def ifttt(trigger):
     requests.get(IFTTT_TEMPLATE.format(trigger=trigger))
 
@@ -82,7 +81,6 @@ def licht(bulb:str=None):
         sonoff('Esstisch')
         sonoff('Bild')
         sonoff('Ananas')
-    print(request.args)
     if request.args.get('mainpage'):
         return redirect(url_for('mainpage'))
     return redirect(url_for(f'{plugin_name}.licht_more'))
