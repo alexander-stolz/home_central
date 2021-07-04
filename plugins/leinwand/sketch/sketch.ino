@@ -3,7 +3,7 @@ int pinDown = 11;
 bool movingUp = false;
 bool movingDown = false;
 long pos = 0;
-long maxPos = 37000;
+long maxPos = 37400;
 
 void setup() {
   pinMode(pinUp, OUTPUT);
@@ -17,8 +17,9 @@ void loop() {
   delay(100);
   if (movingUp) {
     pos -= 100;
-    pos = max(pos + 1000, 0);
+    pos = max(pos, 0);
     if (pos == 0) {
+      delay(300);
       pressButton(pinDown);
       movingUp = false;
     }
@@ -35,23 +36,16 @@ void loop() {
     int inByte = Serial.read();
     // pause
     if (inByte == 1) {
-      if (movingUp) {
-        pressButton(pinDown);
-        movingUp = false;
-      }
-      if (movingDown) {
-        pressButton(pinUp);
-        movingUp = false;
-      }
+      Serial.println(pos);
+      Serial.println(movingUp);
+      Serial.println(movingDown);
     }
     // up
     else if (inByte == 2) {
       pressButton(pinUp);
       if (not movingDown) {
         movingUp = true;
-      }
-      else {
-        pos += 500;
+        pos -= 500;
       }
       movingDown = false;
     }
@@ -60,9 +54,7 @@ void loop() {
       pressButton(pinDown);
       if (not movingUp) {
         movingDown = true;
-      }
-      else {
-        //pos -= 500;
+        pos += 500;
       }
       movingUp = false;
     }
