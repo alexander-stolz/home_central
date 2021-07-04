@@ -1,5 +1,6 @@
 int pinUp = 12;
 int pinDown = 11;
+int pinStop = 10;
 bool movingUp = false;
 bool movingDown = false;
 long pos = 0;
@@ -20,7 +21,7 @@ void loop() {
     pos = max(pos, 0);
     if (pos == 0) {
       delay(300);
-      pressButton(pinDown);
+      pressButton(pinStop);
       movingUp = false;
     }
   }
@@ -28,7 +29,7 @@ void loop() {
     pos += 100;
     pos = min(pos, maxPos);
     if (pos == maxPos) {
-      pressButton(pinUp);
+      pressButton(pinStop);
       movingDown = false;
     }
   }
