@@ -1,9 +1,9 @@
 int pinUp = 12;
 int pinDown = 11;
-long maxPos = 37000;
-bool movingDown = false;
 bool movingUp = false;
+bool movingDown = false;
 long pos = 0;
+long maxPos = 37000;
 
 void setup() {
   pinMode(pinUp, OUTPUT);
@@ -20,7 +20,7 @@ void loop() {
     pos = max(pos, 0);
     if (pos == 0) {
       pressButton(pinDown);
-      movingUp = false;      
+      movingUp = false;
     }
   }
   if (movingDown) {
@@ -48,10 +48,10 @@ void loop() {
     else if (inByte == 2) {
       pressButton(pinUp);
       if (not movingDown) {
-        movingUp = true;  
+        movingUp = true;
       }
       else {
-        pos += 100;
+        pos += 500;
       }
       movingDown = false;
     }
@@ -59,10 +59,10 @@ void loop() {
     else if (inByte == 3) {
       pressButton(pinDown);
       if (not movingUp) {
-        movingDown = true;  
+        movingDown = true;
       }
       else {
-        pos -= 100;
+        pos -= 500;
       }
       movingUp = false;
     }
