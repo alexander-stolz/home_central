@@ -9,8 +9,10 @@ long maxPos = 37400;
 void setup() {
   pinMode(pinUp, OUTPUT);
   pinMode(pinDown, OUTPUT);
+  pinMode(pinStop, OUTPUT);
   digitalWrite(pinUp, LOW);
   digitalWrite(pinDown, LOW);
+  digitalWrite(pinStop, LOW);
   Serial.begin(9600);
 }
 
