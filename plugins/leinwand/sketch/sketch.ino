@@ -17,7 +17,7 @@ void loop() {
   delay(100);
   if (movingUp) {
     pos -= 100;
-    pos = max(pos, 0);
+    pos = max(pos + 1000, 0);
     if (pos == 0) {
       pressButton(pinDown);
       movingUp = false;
@@ -62,7 +62,7 @@ void loop() {
         movingDown = true;
       }
       else {
-        pos -= 500;
+        //pos -= 500;
       }
       movingUp = false;
     }
