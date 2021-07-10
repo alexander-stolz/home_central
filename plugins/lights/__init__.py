@@ -115,20 +115,20 @@ def licht(bulb:str=None):
 def licht_more():
     tiles = dict(
         back=url_for('mainpage'),
-        wohnzimmer=dict(
-            _w=dict(
-                __default=url_for(f'{plugin_name}.licht', bulb='wohnzimmer'),
-                decke=url_for(f'{plugin_name}.licht', bulb='wohnzimmer_decke'),
-                globus=url_for(f'{plugin_name}.licht', bulb='globus'),
-                baum=url_for(f'{plugin_name}.licht', bulb='baum'),
-            ),
-        ),
         esszimmer=dict(
-            _e=dict(
+            eat=dict(
                 __default=url_for(f'{plugin_name}.licht', bulb='esszimmer'),
                 tisch=url_for(f'{plugin_name}.licht', bulb='esstisch'),
                 bild=url_for(f'{plugin_name}.licht', bulb='bild'),
                 tv=url_for(f'{plugin_name}.licht', bulb='ananas'),
+            ),
+        ),
+        wohnzimmer=dict(
+            chill=dict(
+                __default=url_for(f'{plugin_name}.licht', bulb='wohnzimmer'),
+                decke=url_for(f'{plugin_name}.licht', bulb='wohnzimmer_decke'),
+                globus=url_for(f'{plugin_name}.licht', bulb='globus'),
+                baum=url_for(f'{plugin_name}.licht', bulb='baum'),
             ),
         ),
         flur=url_for(f'{plugin_name}.licht', bulb='flur'),
