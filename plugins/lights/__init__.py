@@ -18,9 +18,9 @@ bp = Blueprint(plugin_name, __name__)
 tile = f"""dict(
             licht=dict(
                 __default=url_for('{plugin_name}.licht_more'),
-                _1=url_for(f'{plugin_name}.licht', bulb='wohnzimmer', mainpage=True),
-                _2=url_for(f'{plugin_name}.licht', bulb='esszimmer', mainpage=True),
-                _3=url_for(f'{plugin_name}.licht', bulb='flur', mainpage=True),
+                __128715=url_for(f'{plugin_name}.licht', bulb='wohnzimmer', mainpage=True),
+                __127869=url_for(f'{plugin_name}.licht', bulb='esszimmer', mainpage=True),
+                __128682=url_for(f'{plugin_name}.licht', bulb='flur', mainpage=True),
                 all=url_for('{plugin_name}.licht', bulb='all', mainpage=True),
             )
         )"""
@@ -114,21 +114,21 @@ def licht(bulb:str=None):
 @bp.route('/light')
 def licht_more():
     tiles = dict(
-        back=url_for('mainpage'),
+        __10235=url_for('mainpage'),
         esszimmer=dict(
             eat=dict(
                 __default=url_for(f'{plugin_name}.licht', bulb='esszimmer'),
-                tisch=url_for(f'{plugin_name}.licht', bulb='esstisch'),
-                bild=url_for(f'{plugin_name}.licht', bulb='bild'),
-                tv=url_for(f'{plugin_name}.licht', bulb='ananas'),
+                __127869=url_for(f'{plugin_name}.licht', bulb='esstisch'),
+                __128444=url_for(f'{plugin_name}.licht', bulb='bild'),
+                __127821=url_for(f'{plugin_name}.licht', bulb='ananas'),
             ),
         ),
         wohnzimmer=dict(
             chill=dict(
                 __default=url_for(f'{plugin_name}.licht', bulb='wohnzimmer'),
-                decke=url_for(f'{plugin_name}.licht', bulb='wohnzimmer_decke'),
-                globus=url_for(f'{plugin_name}.licht', bulb='globus'),
-                baum=url_for(f'{plugin_name}.licht', bulb='baum'),
+                __128161=url_for(f'{plugin_name}.licht', bulb='wohnzimmer_decke'),
+                __127757=url_for(f'{plugin_name}.licht', bulb='globus'),
+                __127794=url_for(f'{plugin_name}.licht', bulb='baum'),
             ),
         ),
         flur=url_for(f'{plugin_name}.licht', bulb='flur'),
