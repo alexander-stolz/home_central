@@ -55,7 +55,7 @@
     .btn {
       width: 100%;
     }
-    .btn-secondary {
+    .alert {
       width: 100%;
     }
   </style>
@@ -102,17 +102,17 @@
     {% with messages = get_flashed_messages() %}
       {% if messages|length > 1 or messages[0]|length > 30: %}
           <div class="alert alert-secondary py-2" role="alert">
-            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
             {% for message in messages %}
                 <div>{{ message }}</div>
             {% endfor %}
+            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
           </div>
       {% elif messages|length == 1: %}
           <div class="alert alert-secondary py-2" role="alert">
-            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
             {% for message in messages %}
                 {{ message }}
             {% endfor %}
+            <a href="{{ url_for('mainpage') }}" class="btn btn-secondary py-0 btn-sm">&times;</a>
           </div>
       {% endif %}
     {% endwith %}
