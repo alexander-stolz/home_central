@@ -12,8 +12,8 @@ bp = Blueprint(plugin_name, __name__)
 tile = f"""dict(
             leinwand=dict(
                 __default=url_for('{plugin_name}.leinwand', richtung='status'),
-                runter=url_for('{plugin_name}.leinwand', richtung='runter'),
-                hoch=url_for('{plugin_name}.leinwand', richtung='hoch'),
+                __8595=url_for('{plugin_name}.leinwand', richtung='runter'),
+                __8593=url_for('{plugin_name}.leinwand', richtung='hoch'),
             ),
         )"""
 

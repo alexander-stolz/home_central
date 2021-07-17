@@ -13,8 +13,8 @@ bp = Blueprint(plugin_name, __name__)
 tile = f"""dict(
             vol=dict(
                 __default=url_for('{plugin_name}.volume', volume='toggle_mute'),
-                leiser=url_for('{plugin_name}.volume', volume='-'),
-                lauter=url_for('{plugin_name}.volume', volume='+'),
+                __8722=url_for('{plugin_name}.volume', volume='-'),
+                __43=url_for('{plugin_name}.volume', volume='+'),
             ),
         )"""
 
