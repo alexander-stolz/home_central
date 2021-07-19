@@ -21,9 +21,13 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> #}
 
   <style>
-    .btn-dark{
-        background-color:black;
-        color:white;
+    .btn-submenu{
+        background-color:#0DCAF0;
+        color:black;
+    }
+    .btn-inaktiv{
+        background-color:#0bbbde;
+        color:black;
     }
     html, body {
       height: 100%;
@@ -79,23 +83,23 @@
               {# variable auslagern, falls die buttons spaeter anders aussehen sollen #}
               {%- set subvalue_href = subvalue.pop('__default', '#') %}
               {% if subvalue_href == '#': %}
-                <a class="btn btn-info" href="{{subvalue_href}}">{{subkey.replace('_', ' ').strip()}}</a>
+                <a class="btn btn-inaktiv" href="{{subvalue_href}}" id="{{subkey}}">{{subkey.replace('_', ' ').strip()}}</a>
               {% else: %}
-                <a class="btn btn-info" href="{{subvalue_href}}">{{subkey.replace('_', ' ').strip()}}</a>
+                <a class="btn btn-submenu" href="{{subvalue_href}}" id="{{subkey}}">{{subkey.replace('_', ' ').strip()}}</a>
               {% endif %}
               {% for subsubkey, subsubvalue in subvalue.items(): %}
               {% if subsubkey.startswith('__'): %}
                 {% set subsubkey = '&#' + subsubkey[2:] + ';' %}
               {% endif %}
-                <a class="btn btn-secondary" href="{{ subsubvalue }}">{{subsubkey.replace('_', ' ').strip()}}</a>
+                <a class="btn btn-secondary" href="{{ subsubvalue }}" id="{{subsubkey}}">{{subsubkey.replace('_', ' ').strip()}}</a>
               {% endfor %}
             </div>
           {% else: %}
-            <a class="btn btn-secondary" href="{{ subvalue }}">{{ key }} : {{subkey.replace('_', ' ').strip()}}</a>
+            <a class="btn btn-secondary" href="{{ subvalue }}" id="{{subkey}}">{{ key }} : {{subkey.replace('_', ' ').strip()}}</a>
           {% endif %}
         {% endfor %}
       {% else: %}
-        <a class="btn btn-primary" href="{{ value }}">{{ key.replace('_', ' ').strip() }}</a>
+        <a class="btn btn-primary" href="{{ value }}" id="{{key}}">{{ key.replace('_', ' ').strip() }}</a>
       {% endif %}
     {% endfor %}
 
@@ -117,6 +121,7 @@
       {% endif %}
     {% endwith %}
   </div>
+  {{ additional_footer }}
 
 </body>
 </html>

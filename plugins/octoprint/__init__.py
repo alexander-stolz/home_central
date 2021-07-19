@@ -62,7 +62,7 @@ def ender(cmd):
 @bp.route('/ender')
 def ender_more():
     tiles = dict(
-        back=url_for('mainpage'),
+        __10235=url_for('mainpage'),
         control=dict(
             control=dict(
                 cancel=url_for(f'{plugin_name}.ender', cmd='cancel'),
