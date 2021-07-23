@@ -1,0 +1,294 @@
+<canvas id="frame" width="100%" height="100%"></canvas>
+<script>
+// TODO
+/*
+extras:
+- everything green for 10s
+- everything blue for 10s
+- unbreakable for 10s
+-
+*/
+
+window.onload = function() {
+    canvas = document.getElementById("frame");
+    canvas.width = window.innerWidth - 20;
+    canvas.height = window.innerHeight - 20;
+
+    reset(0);
+
+    context = canvas.getContext("2d");
+    document.addEventListener("keydown", keypush);
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchmove', handleTouchMove, {passive: false });
+    setInterval(game, 1000 / 15);
+}
+
+x = 0;
+y = 0;
+vx = vy = 0;
+snake = [];
+food = [];
+poison = [];
+max_food_items = [10, 20, 35, 50, 70, 150];
+max_superfood_items = [1, 3, 10, 15, 20, 30];
+max_poison_items = [10, 20, 50, 100, 200, 500];
+food_items = null;
+superfood_items = null;
+poison_items = null;
+level = 0;
+super_length = 15;
+normal_length = 3;
+s = [];
+
+function round(x) {
+    return parseInt(Math.round(x / 10) * 10);
+}
+
+function reset(l) {
+    s = [];
+    all_x = [];
+    all_y = [];
+    level = l;
+    if (level == max_food_items.length) {
+        reset(0);
+        return;
+    }
+    superfood_items = max_superfood_items[level];
+    food_items = parseInt(Math.random() * max_food_items[level]);
+    poison_items = parseInt(Math.random() * max_poison_items[level]);
+    x = round(canvas.width / 2);
+    y = round(canvas.height / 2);
+    vx = vy = 0;
+    snake = [[x, y]];
+    food = [];
+    poison = [];
+    superfood = [];
+    for (i=0; i<food_items; i++) {
+        x_ = round(Math.random() * (canvas.width - 10));
+        y_ = round(Math.random() * (canvas.height - 10));
+        while (all_x.indexOf(x_) > -1 && all_y.indexOf > -1) {
+            x_ = round(Math.random() * (canvas.width - 10));
+            y_ = round(Math.random() * (canvas.height - 10));
+        }
+        all_x.push(x_);
+        all_y.push(y_);
+        food.push([x_, y_]);
+    }
+
+    for (i=0; i<poison_items; i++) {
+        x_ = round(Math.random() * (canvas.width - 10));
+        y_ = round(Math.random() * (canvas.height - 10));
+        while (all_x.indexOf(x_) > -1 && all_y.indexOf > -1) {
+            x_ = round(Math.random() * (canvas.width - 10));
+            y_ = round(Math.random() * (canvas.height - 10));
+        }
+        all_x.push(x_);
+        all_y.push(y_);
+        poison.push([x_, y_]);
+    }
+
+    for (i=0; i<superfood_items; i++) {
+        x_ = round(Math.random() * (canvas.width - 10));
+        y_ = round(Math.random() * (canvas.height - 10));
+        while (all_x.indexOf(x_) > -1 && all_y.indexOf > -1) {
+            x_ = round(Math.random() * (canvas.width - 10));
+            y_ = round(Math.random() * (canvas.height - 10));
+        }
+        all_x.push(x_);
+        all_y.push(y_);
+        superfood.push([x_, y_]);
+    }
+}
+
+function find_element(element, index, arry) {
+
+}
+
+function keypush(e) {
+    switch (e.keyCode) {
+        case 37:    // left
+            if (vx == 0) {
+                vx = -1;
+                vy = 0;
+            }
+            break;
+        case 38:    // up
+            if (vy == 0) {
+                vx = 0;
+                vy = -1;
+            }
+            break;
+        case 39:    // right
+            if (vx == 0) {
+                vx = 1;
+                vy = 0;
+            }
+            break;
+        case 40:    // down
+            if (vy == 0) {
+                vx = 0;
+                vy = 1;
+            }
+            break;
+    }
+}
+
+function game() {
+    speed = parseInt(snake.length / 4 + 1)
+    x += vx * 10;
+    y += vy * 10;
+    eaten = -1;
+    supereaten = -1;
+
+    context.fillStyle = "black";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    text = "level: " + (level + 1);
+    context.fillStyle = "white";
+    context.textAlign = "right";
+    context.fillText(text, canvas.width - 20, 20);
+
+    context.fillStyle = "green";
+    for (i=0; i<food_items; i++) {
+        context.fillRect(food[i][0], food[i][1], 10, 10);
+        if (x == food[i][0] && y == food[i][1]) {
+            eaten = i;
+            for (j=0; j<normal_length; j++) {
+                s.push(snake[snake.length - 1]);
+                console.log("snake+1");
+            }
+        }
+    }
+    if (eaten > -1) {
+        eat(eaten);
+        console.log("eaten");
+    }
+
+    context.fillStyle = "blue";
+    for (i=0; i<superfood_items; i++) {
+        context.fillRect(superfood[i][0], superfood[i][1], 10, 10);
+        if (x == superfood[i][0] && y == superfood[i][1]) {
+            supereaten = i;
+            for (j=0; j<super_length; j++) {
+                s.push(snake[snake.length - 1]);
+            }
+
+        }
+    }
+    if (supereaten > -1) {
+        supereat(supereaten);
+        console.log("supereaten");
+    }
+
+    context.fillStyle = "yellow";
+    for (i=0; i<poison_items; i++) {
+        context.fillRect(poison[i][0], poison[i][1], 10, 10);
+        if (x == poison[i][0] && y == poison[i][1]) {
+            reset(0);
+            console.log("poison");
+            break;
+        }
+    }
+
+    // console.log([x, y]);
+
+    context.fillStyle = "red";
+    for (i=snake.length-1; i>0; i--) {
+        snake[i] = snake[i-1];
+        if (x == snake[i][0] && y == snake[i][1]) {
+            reset(0);
+            console.log("snake");
+            break;
+        } else {
+            context.fillRect(snake[i][0], snake[i][1], 10, 10);
+        }
+    }
+    snake[0] = [x, y];
+    context.fillRect(x, y, 10, 10);
+    if (s.length > 0) {
+        snake.push(s[0]);
+        s.splice(0, 1);
+    }
+
+    if (x>canvas.width-10 || x<0 || y>canvas.height-10 || y<0) {
+        reset(0);
+        console.log("border");
+    }
+    if (food.length == 0 && superfood.length == 0) {
+        reset(++level);
+    }
+}
+
+eat = function(i) {
+    x_ = round(Math.random() * (canvas.width - 10));
+    x_ = round(Math.random() * (canvas.height - 10));
+    while (all_x.indexOf(x_) > -1 && all_y.indexOf > -1) {
+        x_ = round(Math.random() * (canvas.width - 10));
+        y_ = round(Math.random() * (canvas.height - 10));
+    }
+    all_x.push(x_);
+    all_y.push(y_);
+    food.splice(i, 1);
+    poison.push([x_, y_]);
+    food_items--;
+    poison_items++;
+}
+
+supereat = function(i) {
+    x_ = round(Math.random() * (canvas.width - 10));
+    y_ = round(Math.random() * (canvas.height - 10));
+    superfood.splice(i, 1);
+    superfood_items--;
+}
+
+function handleTouchStart(evt) {
+    x_down = evt.touches[0].clientX;
+    y_down = evt.touches[0].clientY;
+};
+
+function handleTouchMove(evt) {
+    evt.preventDefault();
+    if ( ! x_down || ! y_down ) {
+        return;
+    }
+
+    var x_up = evt.touches[0].clientX;
+    var y_up = evt.touches[0].clientY;
+
+    var x_diff = x_down - x_up;
+    var y_diff = y_down - y_up;
+
+    if (Math.abs(x_diff) > Math.abs(y_diff)) {
+        if ( x_diff > 0 ) {
+            //left
+            if (vx == 0) {
+                vx = -1;
+                vy = 0;
+            }
+        } else {
+            //right
+            if (vx == 0) {
+                vx = 1;
+                vy = 0;
+            }
+        }
+    } else {
+        if ( y_diff > 0 ) {
+            // up
+            if (vy == 0) {
+                vx = 0;
+                vy = -1;
+            }
+        } else {
+            // down
+            if (vy == 0) {
+                vx = 0;
+                vy = 1;
+            }
+        }
+    }
+    x_down = null;
+    y_down = null;
+};
+
+</script>

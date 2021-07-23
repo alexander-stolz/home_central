@@ -22,6 +22,8 @@ def system(cmd):
     import os
     if cmd == 'shutdown':
         os.system('shutdown -s -t 10')
+    if cmd == 'restart':
+        os.system('shutdown -r -t 00')
     elif cmd == 'cancel':
         os.system('shutdown -a')
     elif cmd == 'speedtest':
@@ -51,6 +53,7 @@ def system_more():
     tiles = dict(
         __10235=url_for('mainpage'),
         speedtest=url_for(f'{plugin_name}.system', cmd='speedtest'),
+        restart=url_for(f'{plugin_name}.system', cmd='restart'),
         share=dict(
             share=dict(
                 send='#',
