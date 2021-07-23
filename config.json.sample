@@ -1,0 +1,13 @@
+{
+    "secret_key": "super secret key",
+    "debug": true,
+    "plugins": [
+        "airmouse",
+        "music",
+        "volume",
+        "lights",
+        "prismatik",
+        "octoprint",
+        "system"
+    ]
+}

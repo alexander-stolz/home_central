@@ -1,0 +1,4 @@
+{
+    "apikey": "<octoprint api key>",
+    "url": "http://<octoprint ip address>/api/"
+}

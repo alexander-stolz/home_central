@@ -3,6 +3,7 @@ from flask.helpers import url_for
 from flask.templating import render_template
 from werkzeug.utils import redirect
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import json
 from random import choice
 import time
@@ -22,6 +23,14 @@ tile = f"""dict(
             )
         )"""
 
+with open('plugins/music/config.json') as config_file:
+    config = json.load(config_file)
+
+browser_opt = Options()
+extensions = config.get('extensions', [])
+for ext in extensions:
+    browser_opt.add_extension(ext)
+
 x_path_menu = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-browse-response/div[2]/ytmusic-detail-header-renderer/div/ytmusic-menu-renderer/tp-yt-paper-icon-button/tp-yt-iron-icon'
 x_path_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdown/div/ytmusic-menu-popup-renderer/tp-yt-paper-listbox/ytmusic-menu-navigation-item-renderer[1]/a/yt-formatted-string'
 x_path_playpause = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar/div[1]/div/tp-yt-paper-icon-button[2]/tp-yt-iron-icon'
@@ -34,11 +43,13 @@ x_path_top_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dr
 
 @bp.route('/music/<genre>', methods=['GET', 'POST'])
 def music(genre:str=None):
-    def restart_browser():
-        global browser
+    def restart_browser(browser=None):
         if browser:
             browser.quit()
-        browser = webdriver.Chrome()
+        browser = webdriver.Chrome(chrome_options=browser_opt)
+        browser.create_options()
+        browser.implicitly_wait(5)
+        return browser
 
     global browser
     if browser:
@@ -48,7 +59,8 @@ def music(genre:str=None):
             browser.find_element_by_xpath(x_path_playpause).click()
         except:
             pass
-    browser = browser or webdriver.Chrome()
+
+    browser = browser or restart_browser()
     if request.method == 'GET':
         if genre == 'next':
             try:
@@ -68,7 +80,7 @@ def music(genre:str=None):
                     browser.get(_pl)
                 else:
                     browser.get(choice(playlists[genre]))
-                time.sleep(2)
+                # time.sleep(2)
                 browser.find_element_by_xpath(x_path_menu).click()
                 browser.find_element_by_xpath(x_path_radio).click()
             except Exception as e:
@@ -78,20 +90,20 @@ def music(genre:str=None):
                     browser.find_element_by_xpath(x_path_menu).click()
                     browser.find_element_by_xpath(x_path_radio).click()
                 except Exception as e:
-                    restart_browser()
+                    browser = restart_browser(browser)
                     return redirect(url_for(f'{plugin_name}.music', genre=genre))
     elif request.method == 'POST':
         try:
             txt = request.form.get('text')
             search = '+'.join(txt.split())
             browser.get(search_template.format(search))
-            time.sleep(3)
+            # time.sleep(3)
             browser.find_element_by_xpath(x_path_top_result).click()
             browser.find_element_by_xpath(x_path_top_menu).click()
             browser.find_element_by_xpath(x_path_top_radio).click()
         except Exception as e:
             flash(str(e) + ' - try again')
-            restart_browser()
+            browser = restart_browser(browser)
     return redirect(url_for('mainpage'))
 
 

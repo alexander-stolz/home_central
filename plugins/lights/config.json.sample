@@ -1,0 +1,22 @@
+{
+    "ifttt": {
+        "apikey": "<api key>"
+    },
+    "yeelight": {
+        "bulbs": {
+            "<bulb 1 name>": "<bulb 1 ip>",
+            "<bulb 2 name>": "<bulb 2 ip>"
+        }
+    },
+    "sonoff": {
+        "user": "<email>",
+        "password": "<password>",
+        "region": "eu"
+    },
+    "kasa": {
+        "plugs": {
+            "<plug 1 name>": "<plug 1 ip>",
+            "<plug 2 name>": "<plug 2 ip>"
+        }
+    }
+}
