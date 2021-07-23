@@ -7,10 +7,10 @@ plugin_name = 'prismatik'
 bp = Blueprint(plugin_name, __name__)
 
 tile = f"""dict(
-            prismatik=dict(
+            ambilight=dict(
                 __default='#',
-                farbe=url_for('{plugin_name}.set_prismatik_profile', name='colour'),
-                normal=url_for('{plugin_name}.set_prismatik_profile', name='normal'),
+                __127752=url_for('{plugin_name}.set_prismatik_profile', name='colour'),
+                __128250=url_for('{plugin_name}.set_prismatik_profile', name='normal'),
             ),
         )"""
 
