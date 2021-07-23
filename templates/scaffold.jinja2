@@ -26,7 +26,7 @@
         color:black;
     }
     .btn-inaktiv{
-        background-color:#0bbbde;
+        background-color:#0DCAF0;
         color:black;
     }
     html, body {
@@ -103,6 +103,8 @@
       {% endif %}
     {% endfor %}
 
+    {{ additional_tile }}
+
     {% with messages = get_flashed_messages() %}
       {% if messages|length > 1 or messages[0]|length > 30: %}
           <div class="alert alert-secondary py-2" role="alert">
@@ -121,6 +123,7 @@
       {% endif %}
     {% endwith %}
   </div>
+
   {{ additional_footer }}
 
 </body>

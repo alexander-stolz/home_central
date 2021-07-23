@@ -27,8 +27,19 @@ x_path_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdo
 x_path_playpause = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar/div[1]/div/tp-yt-paper-icon-button[2]/tp-yt-iron-icon'
 x_path_next = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar/div[1]/div/tp-yt-paper-icon-button[3]/tp-yt-iron-icon'
 
-@bp.route('/music/<genre>')
+search_template = 'https://music.youtube.com/search?q={}'
+x_path_top_result = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-search-page/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[2]'
+x_path_top_menu = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-search-page/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[2]/ytmusic-responsive-list-item-renderer/ytmusic-menu-renderer/tp-yt-paper-icon-button/tp-yt-iron-icon'
+x_path_top_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdown/div/ytmusic-menu-popup-renderer/tp-yt-paper-listbox/ytmusic-menu-navigation-item-renderer[1]/a/yt-formatted-string'
+
+@bp.route('/music/<genre>', methods=['GET', 'POST'])
 def music(genre:str=None):
+    def restart_browser():
+        global browser
+        if browser:
+            browser.quit()
+        browser = webdriver.Chrome()
+
     global browser
     if browser:
         try:
@@ -38,43 +49,49 @@ def music(genre:str=None):
         except:
             pass
     browser = browser or webdriver.Chrome()
-    if genre == 'next':
-        try:
-            browser.find_element_by_xpath(x_path_next).click()
-        except:
-            flash('music: next failed')
-    elif genre == 'off':
-        try:
-            browser.get('about:blank')
-        except:
-            flash('music: off failed')
-    elif genre:
-        try:
-            if genre == 'random':
-                _genre = choice(tuple(playlists.keys()))
-                _pl = choice(playlists[_genre])
-                browser.get(_pl)
-            else:
-                browser.get(choice(playlists[genre]))
-            time.sleep(2)
-            browser.find_element_by_xpath(x_path_menu).click()
-            browser.find_element_by_xpath(x_path_radio).click()
-        except Exception as e:
-            print(e)
+    if request.method == 'GET':
+        if genre == 'next':
             try:
-                time.sleep(5)
+                browser.find_element_by_xpath(x_path_next).click()
+            except:
+                flash('music: next failed')
+        elif genre == 'off':
+            try:
+                browser.get('about:blank')
+            except:
+                flash('music: off failed')
+        elif genre:
+            try:
+                if genre == 'random':
+                    _genre = choice(tuple(playlists.keys()))
+                    _pl = choice(playlists[_genre])
+                    browser.get(_pl)
+                else:
+                    browser.get(choice(playlists[genre]))
+                time.sleep(2)
                 browser.find_element_by_xpath(x_path_menu).click()
                 browser.find_element_by_xpath(x_path_radio).click()
             except Exception as e:
                 print(e)
                 try:
-                    browser.close()
-                except:
-                    pass
-                del browser
-                browser = None
-                print('starte chrome neu')
-                return redirect(url_for(f'{plugin_name}.music', genre=genre))
+                    time.sleep(5)
+                    browser.find_element_by_xpath(x_path_menu).click()
+                    browser.find_element_by_xpath(x_path_radio).click()
+                except Exception as e:
+                    restart_browser()
+                    return redirect(url_for(f'{plugin_name}.music', genre=genre))
+    elif request.method == 'POST':
+        try:
+            txt = request.form.get('text')
+            search = '+'.join(txt.split())
+            browser.get(search_template.format(search))
+            time.sleep(3)
+            browser.find_element_by_xpath(x_path_top_result).click()
+            browser.find_element_by_xpath(x_path_top_menu).click()
+            browser.find_element_by_xpath(x_path_top_radio).click()
+        except Exception as e:
+            flash(str(e) + ' - try again')
+            restart_browser()
     return redirect(url_for('mainpage'))
 
 
@@ -88,4 +105,13 @@ def music_more():
         electroswing=url_for(f'{plugin_name}.music', genre='electroswing'),
         off=url_for(f'{plugin_name}.music', genre='off')
     )
-    return render_template('scaffold.jinja2', tiles=tiles)
+    return render_template('scaffold.jinja2', tiles=tiles, additional_tile=wish_tile)
+
+wish_tile = f"""
+<form class="btn-group" style="display:flex" action="/music/search" method="POST">
+<input
+    type="text" id="txt" name="text" autocomplete="off" class="form-control"
+    placeholder="make a wish" style="text-align: center; width: 100%;">
+<button type="submit" class="btn btn-primary" style="width:5em;">send</button>
+</form>
+"""
