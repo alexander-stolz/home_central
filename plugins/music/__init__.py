@@ -29,7 +29,7 @@ with open('plugins/music/config.json') as config_file:
 browser_opt = Options()
 extensions = config.get('extensions', [])
 for ext in extensions:
-    browser_opt.add_extension(ext)
+    browser_opt.add_argument('load-extension=' + ext)
 
 x_path_menu = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-browse-response/div[2]/ytmusic-detail-header-renderer/div/ytmusic-menu-renderer/tp-yt-paper-icon-button/tp-yt-iron-icon'
 x_path_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdown/div/ytmusic-menu-popup-renderer/tp-yt-paper-listbox/ytmusic-menu-navigation-item-renderer[1]/a/yt-formatted-string'
