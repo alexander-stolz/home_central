@@ -1,3 +1,4 @@
+<meta name="theme-color" content="#000000">
 <body style="background-color: #000000;">
     <canvas id="frame" width="100%" height="100%"></canvas>
 </body>
@@ -148,6 +149,7 @@ function game() {
     text = "level: " + (level + 1);
     context.fillStyle = "white";
     context.textAlign = "right";
+    context.font = "16px Arial";
     context.fillText(text, canvas.width - 20, 20);
 
     context.fillStyle = "green";

@@ -13,6 +13,7 @@ yeelight = "*"
 sonoff-python = "*"
 pyserial = "*"
 python-kasa = "*"
+meross-iot = "==0.4.1.1rc1"
 
 [dev-packages]
 
