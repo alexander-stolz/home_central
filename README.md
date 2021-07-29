@@ -1,5 +1,7 @@
-![main](images/main.jpg)
-![music](images/music.jpg)
-![light](images/light.jpg)
-![octo](images/octo.jpg)
-![system](images/system.jpg)
+[video](https://photos.app.goo.gl/2cEGFoXNRqDePiSAA)
+
+![main](etc/main.jpg)
+![music](etc/music.jpg)
+![light](etc/light.jpg)
+![octo](etc/octo.jpg)
+![system](etc/system.jpg)
