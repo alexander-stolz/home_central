@@ -37,9 +37,9 @@ x_path_playpause = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar
 x_path_next = '/html/body/ytmusic-app/ytmusic-app-layout/ytmusic-player-bar/div[1]/div/tp-yt-paper-icon-button[3]/tp-yt-iron-icon'
 
 search_template = 'https://music.youtube.com/search?q={}'
-x_path_top_result = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-search-page/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[2]'
-x_path_top_menu = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-search-page/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[2]/ytmusic-responsive-list-item-renderer/ytmusic-menu-renderer/tp-yt-paper-icon-button/tp-yt-iron-icon'
-x_path_top_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdown/div/ytmusic-menu-popup-renderer/tp-yt-paper-listbox/ytmusic-menu-navigation-item-renderer[1]/a/yt-formatted-string'
+x_path_top_result = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[2]'
+x_path_top_menu = '/html/body/ytmusic-app/ytmusic-app-layout/div[3]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[2]/ytmusic-responsive-list-item-renderer/ytmusic-menu-renderer/tp-yt-paper-icon-button/tp-yt-iron-icon'
+x_path_top_radio = '/html/body/ytmusic-app/ytmusic-popup-container/tp-yt-iron-dropdown/div/ytmusic-menu-popup-renderer/tp-yt-paper-listbox/ytmusic-menu-navigation-item-renderer[2]/a/yt-formatted-string'
 
 @bp.route('/music/<genre>', methods=['GET', 'POST'])
 def music(genre:str=None):
@@ -97,7 +97,7 @@ def music(genre:str=None):
             txt = request.form.get('text')
             search = '+'.join(txt.split())
             browser.get(search_template.format(search))
-            time.sleep(3)
+            # time.sleep(3)
             browser.find_element_by_xpath(x_path_top_result).click()
             browser.find_element_by_xpath(x_path_top_menu).click()
             browser.find_element_by_xpath(x_path_top_radio).click()
