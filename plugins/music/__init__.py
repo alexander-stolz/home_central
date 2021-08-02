@@ -97,7 +97,7 @@ def music(genre:str=None):
             txt = request.form.get('text')
             search = '+'.join(txt.split())
             browser.get(search_template.format(search))
-            # time.sleep(3)
+            time.sleep(3)
             browser.find_element_by_xpath(x_path_top_result).click()
             browser.find_element_by_xpath(x_path_top_menu).click()
             browser.find_element_by_xpath(x_path_top_radio).click()
