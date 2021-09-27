@@ -46,6 +46,10 @@ def ender(cmd):
             octoprint.heat_extruder(215)
         elif cmd == 'tool_off':
             octoprint.heat_extruder(0)
+        elif cmd == 'retract100':
+            octoprint.send_gcode('G1 E-100')
+        elif cmd == 'extrude100':
+            octoprint.send_gcode('G1 E100')
         elif cmd == 'status':
             etl = octoprint.get_etl()
             etl = time.strftime('%H:%M:%S', time.gmtime(etl))
@@ -81,6 +85,12 @@ def ender_more():
                 heat=url_for(f'{plugin_name}.ender', cmd='tool_heat'),
                 off=url_for(f'{plugin_name}.ender', cmd='tool_off'),
             ),
+        ),
+        extrude=dict(
+            extrude={
+                '-100': url_for(f'{plugin_name}.ender', cmd='retract100'),
+                '+100': url_for(f'{plugin_name}.ender', cmd='extrude100'),
+            }
         ),
         disable_steppers=url_for(f'{plugin_name}.ender', cmd='disable_steppers'),
         print_status=url_for(f'{plugin_name}.ender', cmd='status'),

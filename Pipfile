@@ -16,6 +16,8 @@ python-kasa = "*"
 meross-iot = "==0.4.1.1rc1"
 
 [dev-packages]
+flake8 = "*"
+yapf = "*"
 
 [requires]
 python_version = "3"
