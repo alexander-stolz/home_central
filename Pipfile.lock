@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "19431d99f3a43e06e074ce565e1545d4c50e0143cb600a781ae5e5b4d7972362"
+            "sha256": "fa289052f187a573fd9d1756b4532a3aec6550e9ccb387bc0449d2ebdd807e8c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -602,6 +602,14 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
             "version": "==1.26.7"
+        },
+        "uvicorn": {
+            "hashes": [
+                "sha256:17f898c64c71a2640514d4089da2689e5db1ce5d4086c2d53699bf99513421c1",
+                "sha256:d9a3c0dd1ca86728d3e235182683b4cf94cd53a867c288eaeca80ee781b2caff"
+            ],
+            "index": "pypi",
+            "version": "==0.15.0"
         },
         "websocket-client": {
             "hashes": [

@@ -8,11 +8,12 @@ from flask.helpers import url_for
 from importlib import import_module
 from asgiref.wsgi import WsgiToAsgi
 
-app = Flask(__name__)
-asgi_app = WsgiToAsgi(app)
-
 with open('config.json') as config_file:
     config = json.load(config_file)
+
+app = Flask(__name__)
+app.secret_key = config.get('secret_key', '1234')
+asgi_app = WsgiToAsgi(app)
 
 # register plugins
 modules = []
@@ -32,5 +33,4 @@ def mainpage():
 
 # python -m pipenv run flask run
 if __name__ == '__main__':
-    app.secret_key = config.get('secret_key', '1234')
     app.run('0.0.0.0', 5000, debug=config.get('debug', False))

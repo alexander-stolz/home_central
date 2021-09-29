@@ -16,6 +16,7 @@ python-kasa = "*"
 meross-iot = "==0.4.1.1rc1"
 asgiref = "*"
 hypercorn = "*"
+uvicorn = "*"
 
 [dev-packages]
 flake8 = "*"
