@@ -17,6 +17,7 @@ meross-iot = "==0.4.1.1rc1"
 asgiref = "*"
 hypercorn = "*"
 uvicorn = "*"
+colorama = "*"
 
 [dev-packages]
 flake8 = "*"
