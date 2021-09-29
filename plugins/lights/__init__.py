@@ -36,11 +36,17 @@ with open('plugins/lights/config.json') as config_file:
 IFTTT_TEMPLATE = "https://maker.ifttt.com/trigger/{trigger}/with/key/" + _key
 
 s_connection = sonoff.Sonoff(_user, _pass, _region)
-s_device_ids = {d['name']:d.get('deviceid') for d in s_connection.get_devices()}
+s_device_ids = {
+    d['name']: d.get('deviceid')
+    for d in s_connection.get_devices()
+}
 
-s_devices = {name:s_connection.get_device(dev_id) for name, dev_id in s_device_ids.items()}
-y_devices = {name:Bulb(ip) for name, ip in _y_bulbs.items()}
-k_devices = {name:SmartPlug(ip) for name, ip in _k_plugs.items()}
+s_devices = {
+    name: s_connection.get_device(dev_id)
+    for name, dev_id in s_device_ids.items()
+}
+y_devices = {name: Bulb(ip) for name, ip in _y_bulbs.items()}
+k_devices = {name: ip for name, ip in _k_plugs.items()}
 
 
 def ifttt(trigger):
@@ -51,7 +57,7 @@ def sonoff(device, state='toggle'):
     if state == 'toggle':
         d = s_devices[device]
         state = d['params']['switch']
-        state = {'on':'off', 'off':'on'}[state]
+        state = {'on': 'off', 'off': 'on'}[state]
     s_connection.switch(state, s_device_ids[device])
     time.sleep(.5)
 
@@ -67,7 +73,7 @@ def yeelight(device, state='toggle'):
 
 
 def kasa(device, state='toggle'):
-    dev = k_devices[device]
+    dev = SmartPlug(k_devices[device])
     asyncio.run(dev.update())
     if state == 'toggle':
         state = 'on' if dev.is_off else 'off'
@@ -75,11 +81,13 @@ def kasa(device, state='toggle'):
         asyncio.run(dev.turn_on())
     elif state == 'off':
         asyncio.run(dev.turn_off())
+    dev.protocol.close()
+    del dev
     time.sleep(.5)
 
 
 @bp.route('/light/<bulb>')
-def licht(bulb:str=None):
+def licht(bulb: str = None):
     if bulb in ('flur', 'all'):
         yeelight('flur')
     if bulb in ('schlafzimmer', 'all'):
@@ -115,22 +123,18 @@ def licht(bulb:str=None):
 def licht_more():
     tiles = dict(
         __10235=url_for('mainpage'),
-        esszimmer=dict(
-            eat=dict(
-                __default=url_for(f'{plugin_name}.licht', bulb='esszimmer'),
-                __127869=url_for(f'{plugin_name}.licht', bulb='esstisch'),
-                __128444=url_for(f'{plugin_name}.licht', bulb='bild'),
-                __127821=url_for(f'{plugin_name}.licht', bulb='ananas'),
-            ),
-        ),
-        wohnzimmer=dict(
-            chill=dict(
-                __default=url_for(f'{plugin_name}.licht', bulb='wohnzimmer'),
-                __128161=url_for(f'{plugin_name}.licht', bulb='wohnzimmer_decke'),
-                __127757=url_for(f'{plugin_name}.licht', bulb='globus'),
-                __127794=url_for(f'{plugin_name}.licht', bulb='baum'),
-            ),
-        ),
+        esszimmer=dict(eat=dict(
+            __default=url_for(f'{plugin_name}.licht', bulb='esszimmer'),
+            __127869=url_for(f'{plugin_name}.licht', bulb='esstisch'),
+            __128444=url_for(f'{plugin_name}.licht', bulb='bild'),
+            __127821=url_for(f'{plugin_name}.licht', bulb='ananas'),
+        ), ),
+        wohnzimmer=dict(chill=dict(
+            __default=url_for(f'{plugin_name}.licht', bulb='wohnzimmer'),
+            __128161=url_for(f'{plugin_name}.licht', bulb='wohnzimmer_decke'),
+            __127757=url_for(f'{plugin_name}.licht', bulb='globus'),
+            __127794=url_for(f'{plugin_name}.licht', bulb='baum'),
+        ), ),
         flur=url_for(f'{plugin_name}.licht', bulb='flur'),
         schild=url_for(f'{plugin_name}.licht', bulb='schild'),
         schlafzimmer=url_for(f'{plugin_name}.licht', bulb='schlafzimmer'),
