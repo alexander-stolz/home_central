@@ -6,8 +6,10 @@ from flask import Flask
 from flask.templating import render_template
 from flask.helpers import url_for
 from importlib import import_module
+from asgiref.wsgi import WsgiToAsgi
 
 app = Flask(__name__)
+asgi_app = WsgiToAsgi(app)
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -19,12 +21,14 @@ for plugin in config.get('plugins', []):
     app.register_blueprint(p.bp)
     modules.append(p)
 
+
 @app.route('/')
 def mainpage():
     tiles = OrderedDict()
     for p in modules:
         tiles[p.plugin_name] = eval(p.tile)
     return render_template('scaffold.jinja2', tiles=tiles)
+
 
 # python -m pipenv run flask run
 if __name__ == '__main__':
