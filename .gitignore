@@ -6,3 +6,4 @@ chromedriver.exe
 config.json
 test.py
 /__pycache__
+lockfile
