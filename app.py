@@ -7,9 +7,6 @@ from flask.templating import render_template
 from flask.helpers import url_for
 from importlib import import_module
 from asgiref.wsgi import WsgiToAsgi
-import colorama
-
-colorama.init()
 
 with open('config.json') as config_file:
     config = json.load(config_file)

@@ -5,3 +5,4 @@
 chromedriver.exe
 config.json
 test.py
+/__pycache__
