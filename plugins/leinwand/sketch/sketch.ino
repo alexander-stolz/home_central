@@ -6,7 +6,8 @@ bool movingDown = false;
 long pos = 0;
 long maxPos = 37400;
 
-void setup() {
+void setup()
+{
   pinMode(pinUp, OUTPUT);
   pinMode(pinDown, OUTPUT);
   pinMode(pinStop, OUTPUT);
@@ -16,46 +17,64 @@ void setup() {
   Serial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
   delay(100);
-  if (movingUp) {
+  if (movingUp)
+  {
     pos -= 100;
     pos = max(pos, 0);
-    if (pos == 0) {
+    if (pos == 0)
+    {
       delay(300);
       pressButton(pinStop);
       movingUp = false;
     }
   }
-  if (movingDown) {
+  if (movingDown)
+  {
     pos += 100;
     pos = min(pos, maxPos);
-    if (pos == maxPos) {
+    if (pos == maxPos)
+    {
       pressButton(pinStop);
       movingDown = false;
     }
   }
-  if (Serial.available() > 0) {
+  if (Serial.available() > 0)
+  {
     int inByte = Serial.read();
     // pause
-    if (inByte == 1) {
+    if (inByte == 1)
+    {
       Serial.println(pos);
       Serial.println(movingUp);
       Serial.println(movingDown);
     }
     // up
-    else if (inByte == 2) {
+    else if (inByte == 2)
+    {
       pressButton(pinUp);
-      if (not movingDown) {
+      if (not movingDown)
+      {
         movingUp = true;
-        pos -= 500;
+        if (pos == 0)
+        {
+          pos = maxPos;
+        }
+        else
+        {
+          pos -= 500;
+        }
       }
       movingDown = false;
     }
     // down
-    else if (inByte == 3) {
+    else if (inByte == 3)
+    {
       pressButton(pinDown);
-      if (not movingUp) {
+      if (not movingUp)
+      {
         movingDown = true;
         pos += 500;
       }
@@ -64,7 +83,8 @@ void loop() {
   }
 }
 
-void pressButton(int pin) {
+void pressButton(int pin)
+{
   digitalWrite(pin, HIGH);
   delay(500);
   digitalWrite(pin, LOW);
