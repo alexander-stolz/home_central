@@ -133,7 +133,34 @@
       toucharea.addEventListener('touchstart', handleTouchStart);
       toucharea.addEventListener('touchmove', handleTouchMove, { passive: false });
       toucharea.addEventListener('touchend', handleTouchEnd);
+      document.onkeydown = handleKeyDown;
     }
+
+    function handleKeyDown(evt) {
+      console.log(evt.keyCode);
+      if (evt.keyCode == 38) {
+        evt.preventDefault();
+        $.post("/airmouse", JSON.stringify({
+          type: "volume",
+          volume: "+"
+        }));
+      }
+      else if (evt.keyCode == 40) {
+        evt.preventDefault();
+        $.post("/airmouse", JSON.stringify({
+          type: "volume",
+          volume: "-"
+        }));
+      }
+      else {
+        console.log(evt.keyCode);
+        // evt.preventDefault();
+        // $.post("/airmouse", JSON.stringify({
+        //   type: "key",
+        //   key: evt.keyCode
+        // }));
+      }
+    };
 
     function round(x) {
       return parseInt(Math.round(x / 10) * 10);
@@ -144,6 +171,7 @@
       y_old = evt.touches[0].clientY;
       x_new = x_old;
       y_new = y_old;
+      x_start = x_old;
       lastMove = Date.now();
     };
 
@@ -168,6 +196,7 @@
       }
       if (Date.now() - lastMove > 20) {
         lastMove = Date.now();
+
         x_old = x_new;
         y_old = y_new;
 
@@ -177,12 +206,27 @@
         var x_diff = x_new - x_old;
         var y_diff = y_new - y_old;
 
-        $.post("/airmouse", JSON.stringify({
-          type: "touch",
-          x: x_diff,
-          y: y_diff,
-          touches: evt.touches.length
-        }));
+        if (x_start > 70) {
+          $.post("/airmouse", JSON.stringify({
+            type: "touch",
+            x: x_diff,
+            y: y_diff,
+            start: x_start,
+            touches: evt.touches.length
+          }));
+        }
+        else if (y_diff > 0) {
+          $.post("/airmouse", JSON.stringify({
+            type: "volume",
+            volume: "-"
+          }));
+        }
+        else if (y_diff < 0) {
+          $.post("/airmouse", JSON.stringify({
+            type: "volume",
+            volume: "+"
+          }));
+        }
       }
     };
   </script>

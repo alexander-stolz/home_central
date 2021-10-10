@@ -49,6 +49,13 @@ def airmouse():
         elif res.get('type') == 'right':
             keyboard.press(Key.right)
             keyboard.release(Key.right)
+        elif res.get('type') == 'volume':
+            if res['volume'] == '+':
+                keyboard.press(Key.media_volume_up)
+                keyboard.release(Key.media_volume_up)
+            elif res['volume'] == '-':
+                keyboard.press(Key.media_volume_down)
+                keyboard.release(Key.media_volume_down)
         else:
             dx, dy, touches = res['x'], res['y'], res['touches']
             if dx == dy == 0 and not mouse_blocked():
@@ -64,8 +71,6 @@ def airmouse():
                 elif abs(dy) > abs(dx) * 1:
                     mouse.scroll(0, dy / 3)
                 block_mouse(dt=.3)
-                # else:
-                #     mouse.scroll(dx, dy)
         return (json.dumps({'success': True}), 200, {
             'ContentType': 'application/json'
         })
