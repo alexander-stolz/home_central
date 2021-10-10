@@ -1,32 +1,41 @@
 <!DOCTYPE html>
+
 <head>
   <title>Air Mouse - Home Central</title>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#222233">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
   <style>
     .btn-group {
       position: absolute;
       bottom: 0;
     }
+
     .input-group {
       position: absolute;
       bottom: 0;
     }
+
     input {
       text-align: center;
     }
+
     /* .touchme {
       border: 1px dotted red;
     } */
-    html, body, .box, .touchme {
+    html,
+    body,
+    .box,
+    .touchme {
       height: 100%;
       width: 100%;
       margin: 0;
     }
+
     body {
       display: flex;
       background-color: #222233;
@@ -47,18 +56,18 @@
           <input type="submit" id="right" class="btn btn-secondary" value="&gt;">
           <input type="text" id="txt" autocomplete="off" class="form-control" placeholder="text">
           <input type="submit" id="enter" class="btn btn-primary" value="send">
-          <input type="submit" id = "del" class="btn btn-secondary" value="delete">
+          <input type="submit" id="del" class="btn btn-secondary" value="delete">
         </div>
       </form>
     </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script>
-    $("#textInputForm").submit(function(e) {
+    $("#textInputForm").submit(function (e) {
       e.preventDefault();
     });
 
-    $("#enter").on("click", function() {
+    $("#enter").on("click", function () {
       $.post(
         "/airmouse",
         JSON.stringify({
@@ -69,7 +78,7 @@
       );
     });
 
-    $("#del").on("click", function() {
+    $("#del").on("click", function () {
       $.post(
         "/airmouse",
         JSON.stringify({
@@ -79,7 +88,7 @@
       );
     });
 
-    $("#left").on("click", function() {
+    $("#left").on("click", function () {
       $.post(
         "/airmouse",
         JSON.stringify({
@@ -89,7 +98,7 @@
       );
     });
 
-    $("#space").on("click", function() {
+    $("#space").on("click", function () {
       $.post(
         "/airmouse",
         JSON.stringify({
@@ -99,7 +108,7 @@
       );
     });
 
-    $("#f").on("click", function() {
+    $("#f").on("click", function () {
       $.post(
         "/airmouse",
         JSON.stringify({
@@ -109,7 +118,7 @@
       );
     });
 
-    $("#right").on("click", function() {
+    $("#right").on("click", function () {
       $.post(
         "/airmouse",
         JSON.stringify({
@@ -120,42 +129,45 @@
     });
   </script>
   <script>
-    window.onload = function() {
+    window.onload = function () {
       toucharea.addEventListener('touchstart', handleTouchStart);
-      toucharea.addEventListener('touchmove', handleTouchMove, {passive: false });
+      toucharea.addEventListener('touchmove', handleTouchMove, { passive: false });
       toucharea.addEventListener('touchend', handleTouchEnd);
     }
 
     function round(x) {
-        return parseInt(Math.round(x / 10) * 10);
+      return parseInt(Math.round(x / 10) * 10);
     };
 
     function handleTouchStart(evt) {
-        x_old = evt.touches[0].clientX;
-        y_old = evt.touches[0].clientY;
-        x_new = x_old;
-        y_new = y_old;
+      x_old = evt.touches[0].clientX;
+      y_old = evt.touches[0].clientY;
+      x_new = x_old;
+      y_new = y_old;
+      lastMove = Date.now();
     };
 
     function handleTouchEnd(evt) {
-        $.post(
-          "/airmouse",
-          JSON.stringify({
-            type: "touch",
-            x: x_new - x_old,
-            y: y_new - y_old,
-            touches: evt.touches.length,
-          })
-        );
-        x_old = null;
-        y_old = null;
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "touch",
+          x: x_new - x_old,
+          y: y_new - y_old,
+          touches: evt.touches.length,
+        })
+      );
+      x_old = null;
+      y_old = null;
     };
 
     function handleTouchMove(evt) {
-        evt.preventDefault();
-        if ( ! x_old || ! y_old ) {
-            return;
-        }
+      evt.preventDefault();
+      if (!x_old || !y_old) {
+        return;
+      }
+      if (Date.now() - lastMove > 20) {
+        lastMove = Date.now();
         x_old = x_new;
         y_old = y_new;
 
@@ -171,9 +183,11 @@
           y: y_diff,
           touches: evt.touches.length
         }));
+      }
     };
   </script>
 </body>
+
 </html>
 
 <!-- https://getbootstrap.com/docs/4.2/components/forms/ -->

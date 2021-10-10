@@ -2,6 +2,7 @@
 import json
 from typing import OrderedDict
 from flask import Flask
+from flask.helpers import url_for
 from flask.templating import render_template
 from importlib import import_module
 from asgiref.wsgi import WsgiToAsgi
@@ -19,6 +20,7 @@ for plugin in config.get('plugins', []):
     p = import_module(f'plugins.{plugin}')
     app.register_blueprint(p.bp)
     modules.append(p)
+    print(f'[x] Registered plugin {plugin}')
 
 
 @app.route('/')
