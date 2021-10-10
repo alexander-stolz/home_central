@@ -1,7 +1,5 @@
 from flask import Blueprint, request
-from flask.helpers import url_for
 from flask.templating import render_template
-from werkzeug.utils import redirect
 import json
 import time
 import pynput
@@ -68,9 +66,7 @@ def airmouse():
                 block_mouse(dt=.3)
                 # else:
                 #     mouse.scroll(dx, dy)
-        return (
-            json.dumps({'success':True}),
-            200,
-            {'ContentType':'application/json'}
-        )
+        return (json.dumps({'success': True}), 200, {
+            'ContentType': 'application/json'
+        })
     return render_template('airmouse/airmouse.html')

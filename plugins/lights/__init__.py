@@ -2,9 +2,7 @@ from flask import Blueprint, request
 from flask.helpers import url_for
 from flask.templating import render_template
 from werkzeug.utils import redirect
-from selenium import webdriver
 import json
-from random import choice
 import time
 import requests
 from . import sonoff
