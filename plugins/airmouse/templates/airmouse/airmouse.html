@@ -46,7 +46,10 @@
 <body>
 
   <div class="box">
-    <div id="toucharea" class="touchme"></div>
+    <div id="toucharea" class="touchme">
+      <div style="position: absolute;width: 50px;height: 100%;background-color: #252536;"></div>
+      <div style="position: absolute;width: 50px;height: 100%;background-color: #252536;right: 0;"></div>
+    </div>
     <div class="footer">
       <form action="/airmouse" method="post" id="textInputForm">
         <div class="input-group">
@@ -172,7 +175,7 @@
       x_new = x_old;
       y_new = y_old;
       x_volume = false;
-      if ((x_old < 70) || (x_old > document.body.clientWidth - 70)) {
+      if ((x_old < 50) || (x_old > document.body.clientWidth - 50)) {
         x_volume = true;
       }
       lastMove = Date.now();
