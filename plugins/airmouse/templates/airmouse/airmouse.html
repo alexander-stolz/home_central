@@ -221,12 +221,14 @@
           }));
         }
         else if (y_diff > 0) {
+          window.navigator.vibrate(50);
           $.post("/airmouse", JSON.stringify({
             type: "volume",
             volume: "-"
           }));
         }
         else if (y_diff < 0) {
+          window.navigator.vibrate(50);
           $.post("/airmouse", JSON.stringify({
             type: "volume",
             volume: "+"
