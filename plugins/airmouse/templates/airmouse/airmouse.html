@@ -137,6 +137,17 @@
       toucharea.addEventListener('touchmove', handleTouchMove, { passive: false });
       toucharea.addEventListener('touchend', handleTouchEnd);
       document.onkeydown = handleKeyDown;
+      document.onkeyup = handleKeyUp;
+      shift = false;
+      ctrl = false;
+    }
+    function handleKeyUp(evt) {
+      if (evt.keyCode != 16) {
+        shift = false;
+      }
+      else if (evt.keyCode != 17) {
+        ctrl = false;
+      }
     }
 
     function handleKeyDown(evt) {
@@ -154,13 +165,22 @@
           volume: "-"
         }));
       }
+      else if (evt.keyCode != 16) {
+        shift = true;
+      }
+      else if (evt.keyCode != 17) {
+        ctrl = true;
+      }
       else {
         evt.preventDefault();
         $.post("/airmouse", JSON.stringify({
           type: "key",
-          key: evt.keyCode
+          key: evt.keyCode,
+          shift: shift,
+          ctrl: ctrl
         }));
       }
+      console.log(evt.keyCode);
     };
 
     function round(x) {
