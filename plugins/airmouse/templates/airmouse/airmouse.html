@@ -171,7 +171,10 @@
       y_old = evt.touches[0].clientY;
       x_new = x_old;
       y_new = y_old;
-      x_start = x_old;
+      x_volume = false;
+      if ((x_old < 70) || (x_old > document.body.clientWidth - 70)) {
+        x_volume = true;
+      }
       lastMove = Date.now();
     };
 
@@ -206,12 +209,11 @@
         var x_diff = x_new - x_old;
         var y_diff = y_new - y_old;
 
-        if (x_start > 70) {
+        if (x_volume == false) {
           $.post("/airmouse", JSON.stringify({
             type: "touch",
             x: x_diff,
             y: y_diff,
-            start: x_start,
             touches: evt.touches.length
           }));
         }
