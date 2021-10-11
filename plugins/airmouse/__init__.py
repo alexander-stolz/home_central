@@ -56,6 +56,10 @@ def airmouse():
             elif res['volume'] == '-':
                 keyboard.press(Key.media_volume_down)
                 keyboard.release(Key.media_volume_down)
+        elif res.get('type') == 'key':
+            _key = chr(res['key'])
+            keyboard.press(_key)
+            keyboard.release(_key)
         else:
             dx, dy, touches = res['x'], res['y'], res['touches']
             if dx == dy == 0 and not mouse_blocked():

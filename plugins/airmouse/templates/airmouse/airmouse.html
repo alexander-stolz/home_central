@@ -140,7 +140,6 @@
     }
 
     function handleKeyDown(evt) {
-      console.log(evt.keyCode);
       if (evt.keyCode == 38) {
         evt.preventDefault();
         $.post("/airmouse", JSON.stringify({
@@ -156,12 +155,11 @@
         }));
       }
       else {
-        console.log(evt.keyCode);
-        // evt.preventDefault();
-        // $.post("/airmouse", JSON.stringify({
-        //   type: "key",
-        //   key: evt.keyCode
-        // }));
+        evt.preventDefault();
+        $.post("/airmouse", JSON.stringify({
+          type: "key",
+          key: evt.keyCode
+        }));
       }
     };
 
