@@ -136,6 +136,7 @@
       toucharea.addEventListener('touchstart', handleTouchStart);
       toucharea.addEventListener('touchmove', handleTouchMove, { passive: false });
       toucharea.addEventListener('mousemove', handleMouseMove);
+      toucharea.addEventListener('click', handleMouseClick);
       toucharea.addEventListener('touchend', handleTouchEnd);
       toucharea.addEventListener('keydown', handleKeyDown);
       toucharea.addEventListener('keyup', handleKeyUp);
@@ -258,14 +259,26 @@
     };
 
     function handleMouseMove(evt) {
-      x = evt.offsetX;
-      y = evt.offsetY;
+      // console.log(x, y);
       if (Date.now() - lastMove > 20) {
         lastMove = Date.now();
         $.post("/airmouse", JSON.stringify({
           type: "mouse",
-          x: evt.offsetX,
-          y: evt.offsetY,
+          x: evt.x,
+          y: evt.y,
+        }));
+      }
+    };
+
+    function handleMouseClick(evt) {
+      // console.log(x, y);
+      if (Date.now() - lastMove > 20) {
+        lastMove = Date.now();
+        $.post("/airmouse", JSON.stringify({
+          type: "touch",
+          x: 0,
+          y: 0,
+          touches: 1
         }));
       }
     };
