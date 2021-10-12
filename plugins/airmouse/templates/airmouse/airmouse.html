@@ -157,9 +157,6 @@
     }
 
     function handleKeyDown(evt) {
-      console.log(
-        evt.key, evt.charCode, evt.ctrlKey, evt.shiftKey, evt.isComposing);
-      return;
       if (evt.keyCode == 38) {
         evt.preventDefault();
         $.post("/airmouse", JSON.stringify({
