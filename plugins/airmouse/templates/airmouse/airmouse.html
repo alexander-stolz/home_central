@@ -135,11 +135,13 @@
     window.onload = function () {
       toucharea.addEventListener('touchstart', handleTouchStart);
       toucharea.addEventListener('touchmove', handleTouchMove, { passive: false });
+      toucharea.addEventListener('mousemove', handleMouseMove);
       toucharea.addEventListener('touchend', handleTouchEnd);
-      document.onkeydown = handleKeyDown;
-      document.onkeyup = handleKeyUp;
+      toucharea.addEventListener('keydown', handleKeyDown);
+      toucharea.addEventListener('keyup', handleKeyUp);
       shift = false;
       ctrl = false;
+      lastMove = Date.now();
     }
     function handleKeyUp(evt) {
       if (evt.keyCode == 16) {
@@ -252,6 +254,19 @@
             volume: "+"
           }));
         }
+      }
+    };
+
+    function handleMouseMove(evt) {
+      x = evt.offsetX;
+      y = evt.offsetY;
+      if (Date.now() - lastMove > 20) {
+        lastMove = Date.now();
+        $.post("/airmouse", JSON.stringify({
+          type: "mouse",
+          x: evt.offsetX,
+          y: evt.offsetY,
+        }));
       }
     };
   </script>
