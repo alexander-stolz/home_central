@@ -59,12 +59,17 @@ def airmouse():
         elif res.get('type') == 'key':
             _keycode = KeyCode(res['keyCode'])
             _ctrl = res['ctrl']
+            _shift = res['shift']
+            if _shift:
+                keyboard.press(Key.shift)
             if _ctrl:
                 keyboard.press(Key.ctrl)
             keyboard.press(_keycode)
             keyboard.release(_keycode)
             if _ctrl:
                 keyboard.release(Key.ctrl)
+            if _shift:
+                keyboard.release(Key.shift)
         elif res.get('type') == 'mouse':
             mouse.position = (res['x'], res['y'])
         else:
