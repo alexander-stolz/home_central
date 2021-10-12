@@ -18,6 +18,7 @@ asgiref = "*"
 hypercorn = "*"
 uvicorn = "*"
 colorama = "*"
+ptpython = "*"
 
 [dev-packages]
 flake8 = "*"

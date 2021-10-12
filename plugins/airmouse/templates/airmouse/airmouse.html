@@ -138,11 +138,14 @@
       toucharea.addEventListener('mousemove', handleMouseMove);
       toucharea.addEventListener('click', handleMouseClick);
       toucharea.addEventListener('touchend', handleTouchEnd);
-      document.onkeydown = handleKeyDown;
-      document.onkeyup = handleKeyUp;
+      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener('keyup', handleKeyUp);
+      document.addEventListener('wheel', function (e) {
+        console.log(e.deltaY);
+      });
+      lastMove = Date.now();
       shift = false;
       ctrl = false;
-      lastMove = Date.now();
     }
     function handleKeyUp(evt) {
       if (evt.keyCode == 16) {
@@ -154,6 +157,9 @@
     }
 
     function handleKeyDown(evt) {
+      console.log(
+        evt.key, evt.charCode, evt.ctrlKey, evt.shiftKey, evt.isComposing);
+      return;
       if (evt.keyCode == 38) {
         evt.preventDefault();
         $.post("/airmouse", JSON.stringify({
@@ -178,9 +184,10 @@
         evt.preventDefault();
         $.post("/airmouse", JSON.stringify({
           type: "key",
-          key: evt.keyCode,
-          shift: shift,
-          ctrl: ctrl
+          keyCode: evt.keyCode,
+          key: evt.key,
+          shift: evt.shiftKey,
+          ctrl: evt.ctrlKey,
         }));
       }
       console.log(evt.keyCode);
