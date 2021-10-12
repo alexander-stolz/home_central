@@ -266,7 +266,7 @@
         $.post("/airmouse", JSON.stringify({
           type: "touch",
           x: 0,
-          y: evt.deltaY / abs(evt.deltaY),
+          y: evt.deltaY / Math.abs(evt.deltaY),
           touches: 2
         }));
       }
