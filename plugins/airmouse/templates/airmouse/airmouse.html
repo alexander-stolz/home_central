@@ -265,7 +265,7 @@
         $.post("/airmouse", JSON.stringify({
           type: "mouse",
           x: evt.x,
-          y: evt.y,
+          y: evt.y * 1.05,
         }));
       }
     };
