@@ -140,9 +140,7 @@
       toucharea.addEventListener('touchend', handleTouchEnd);
       document.addEventListener('keydown', handleKeyDown);
       document.addEventListener('keyup', handleKeyUp);
-      document.addEventListener('wheel', function (e) {
-        console.log(e.deltaY);
-      });
+      document.addEventListener('wheel', handleMouseWheel);
       lastMove = Date.now();
       shift = false;
       ctrl = false;
@@ -259,6 +257,18 @@
             volume: "+"
           }));
         }
+      }
+    };
+
+    function handleMouseWheel(evt) {
+      if ((evt.deltaY != 0) && (Date.now() - lastMove > 20)) {
+        lastMove = Date.now();
+        $.post("/airmouse", JSON.stringify({
+          type: "touch",
+          x: 0,
+          y: evt.deltaY / abs(evt.deltaY),
+          touches: 2
+        }));
       }
     };
 
