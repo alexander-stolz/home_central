@@ -73,7 +73,8 @@ def airmouse():
             if _ctrl:
                 keyboard.release(Key.ctrl)
         elif res.get('type') == 'mouse':
-            mouse.position(res['x'], res['y'])
+            print(res)
+            # mouse.position(res['x'], res['y'])
         else:
             dx, dy, touches = res['x'], res['y'], res['touches']
             if dx == dy == 0 and not mouse_blocked():
