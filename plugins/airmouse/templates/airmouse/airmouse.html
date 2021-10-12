@@ -273,13 +273,12 @@
     };
 
     function handleMouseMove(evt) {
-      // console.log(x, y);
       if (Date.now() - lastMove > 20) {
         lastMove = Date.now();
         $.post("/airmouse", JSON.stringify({
           type: "mouse",
-          x: evt.x,
-          y: evt.y * 1.05,
+          x: evt.x * 1920 / toucharea.clientWidth,
+          y: evt.y * 1080 / toucharea.clientHeight,
         }));
       }
     };
