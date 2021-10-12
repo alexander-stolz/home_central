@@ -138,8 +138,8 @@
       toucharea.addEventListener('mousemove', handleMouseMove);
       toucharea.addEventListener('click', handleMouseClick);
       toucharea.addEventListener('touchend', handleTouchEnd);
-      toucharea.onkeydown = handleKeyDown;
-      toucharea.onkeyup = handleKeyUp;
+      document.onkeydown = handleKeyDown;
+      document.onkeyup = handleKeyUp;
       shift = false;
       ctrl = false;
       lastMove = Date.now();
