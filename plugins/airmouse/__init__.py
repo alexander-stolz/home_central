@@ -57,12 +57,12 @@ def airmouse():
                 keyboard.press(Key.media_volume_down)
                 keyboard.release(Key.media_volume_down)
         elif res.get('type') == 'key':
-            _key = res['key']
+            _keycode = res['keyCode']
             _ctrl = res['ctrl']
             if _ctrl:
                 keyboard.press(Key.ctrl)
-            keyboard.press(_key)
-            keyboard.release(_key)
+            keyboard.press(_keycode)
+            keyboard.release(_keycode)
             if _ctrl:
                 keyboard.release(Key.ctrl)
         elif res.get('type') == 'mouse':
