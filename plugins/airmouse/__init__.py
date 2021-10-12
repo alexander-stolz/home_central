@@ -3,7 +3,7 @@ from flask.templating import render_template
 import json
 import time
 import pynput
-from pynput.keyboard import Key
+from pynput.keyboard import Key, KeyCode
 from pynput.mouse import Button
 
 keyboard = pynput.keyboard.Controller()
@@ -57,7 +57,7 @@ def airmouse():
                 keyboard.press(Key.media_volume_down)
                 keyboard.release(Key.media_volume_down)
         elif res.get('type') == 'key':
-            _keycode = res['keyCode']
+            _keycode = KeyCode(res['keyCode'])
             _ctrl = res['ctrl']
             if _ctrl:
                 keyboard.press(Key.ctrl)
