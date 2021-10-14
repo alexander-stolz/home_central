@@ -144,6 +144,7 @@
       lastMove = Date.now();
       shift = false;
       ctrl = false;
+      clicked = false;
     }
     function handleKeyUp(evt) {
       if (evt.keyCode == 16) {
@@ -216,6 +217,7 @@
       );
       x_old = null;
       y_old = null;
+      clicked = true;
     };
 
     function handleTouchMove(evt) {
@@ -273,8 +275,9 @@
     };
 
     function handleMouseMove(evt) {
-      if (Date.now() - lastMove > 20) {
+      if (Date.now() - lastMove > 20 && !clicked) {
         lastMove = Date.now();
+        clicked = false;
         $.post("/airmouse", JSON.stringify({
           type: "mouse",
           x: evt.x * 1920 / toucharea.clientWidth,
