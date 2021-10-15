@@ -206,23 +206,18 @@
     };
 
     function handleTouchEnd(evt) {
-      if (!clicked) {
-        $.post(
-          "/airmouse",
-          JSON.stringify({
-            type: "touch",
-            x: x_new - x_old,
-            y: y_new - y_old,
-            touches: evt.touches.length,
-          })
-        );
-        x_old = null;
-        y_old = null;
-        clicked = true;
-      }
-      else {
-        clicked = false;
-      }
+      $.post(
+        "/airmouse",
+        JSON.stringify({
+          type: "touch",
+          x: x_new - x_old,
+          y: y_new - y_old,
+          touches: evt.touches.length,
+        })
+      );
+      x_old = null;
+      y_old = null;
+      clicked = true;
     };
 
     function handleTouchMove(evt) {
@@ -293,7 +288,7 @@
 
     function handleMouseClick(evt) {
       // console.log(x, y);
-      if (Date.now() - lastMove > 20) {
+      if (Date.now() - lastMove > 20 && !clicked) {
         lastMove = Date.now();
         $.post("/airmouse", JSON.stringify({
           type: "touch",
