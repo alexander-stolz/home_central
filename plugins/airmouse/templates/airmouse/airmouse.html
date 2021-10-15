@@ -206,18 +206,23 @@
     };
 
     function handleTouchEnd(evt) {
-      $.post(
-        "/airmouse",
-        JSON.stringify({
-          type: "touch",
-          x: x_new - x_old,
-          y: y_new - y_old,
-          touches: evt.touches.length,
-        })
-      );
-      x_old = null;
-      y_old = null;
-      clicked = true;
+      if (!clicked) {
+        $.post(
+          "/airmouse",
+          JSON.stringify({
+            type: "touch",
+            x: x_new - x_old,
+            y: y_new - y_old,
+            touches: evt.touches.length,
+          })
+        );
+        x_old = null;
+        y_old = null;
+        clicked = true;
+      }
+      else {
+        clicked = false;
+      }
     };
 
     function handleTouchMove(evt) {
