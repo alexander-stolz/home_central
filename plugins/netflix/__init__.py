@@ -42,6 +42,8 @@ def netflix(cmd):
         mouse.position = (996, 103)
         time.sleep(0.2)
         mouse.click(Button.left)
+        mouse.position = (960, 260)
+        mouse.click(Button.left)
     elif cmd == 'pause':
         keyboard.press(Key.space)
         keyboard.release(Key.space)
