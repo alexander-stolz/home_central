@@ -1,4 +1,4 @@
-from os import remove
+import os
 from flask import Blueprint, flash, request, send_from_directory
 from flask.helpers import url_for
 from flask.templating import render_template
@@ -22,10 +22,14 @@ def clear_share_folder():
     # könnte man auch nur UPLOADS machen. Sinnvoll?
     for file in glob('./static/share/*'):
         try:
-            remove(file)
-        except:
-            pass
+            os.remove(file)
+        except Exception as e:
+            print(e)
 
+
+# make dir ./static/share if it does not exist
+if not os.path.exists('./static/share'):
+    os.mkdir('./static/share')
 
 UPLOADS = []
 clear_share_folder()
@@ -33,14 +37,13 @@ clear_share_folder()
 
 @bp.route('/system/<cmd>', methods=['GET', 'POST'])
 def system(cmd):
-    import os
 
     if cmd == 'shutdown':
-        remove('lockfile')
+        os.remove('lockfile')
         clear_share_folder()
         os.system('shutdown -s -t 10')
     if cmd == 'restart':
-        remove('lockfile')
+        os.remove('lockfile')
         clear_share_folder()
         os.system('shutdown -r -t 00')
     elif cmd == 'cancel':
