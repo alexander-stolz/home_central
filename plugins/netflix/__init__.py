@@ -3,6 +3,7 @@ from flask.helpers import url_for
 import pynput
 from os import system
 import time
+from pynput.mouse import Button
 
 from werkzeug.utils import redirect
 
@@ -31,15 +32,15 @@ def netflix(cmd):
         mouse.position = (1812, 1008)
         mouse.scroll(0, 10)
         time.sleep(0.5)
-        mouse.click()
+        mouse.click(Button.left)
     elif cmd == 'captions':
         mouse.position = (1812, 30)
         mouse.scroll(0, 10)
         time.sleep(0.5)
-        mouse.click()
+        mouse.click(Button.left)
         mouse.position = (996, 103)
         time.sleep(0.2)
-        mouse.click()
+        mouse.click(Button.left)
     elif cmd == 'pause':
         keyboard.press('space')
         keyboard.release('space')
