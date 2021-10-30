@@ -17,7 +17,7 @@ tile = f"""dict(
     netflix=dict(
         __default=url_for('{plugin_name}.netflix', cmd='open'),
         max=url_for('{plugin_name}.netflix', cmd='max'),
-        captions=url_for('{plugin_name}.netfix', cmd='captions'),
+        captions=url_for('{plugin_name}.netflix', cmd='captions'),
         __9199=url_for('{plugin_name}.netflix', cmd='pause'),
     ),
 )"""
