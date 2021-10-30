@@ -3,6 +3,7 @@ from flask.helpers import url_for
 import pynput
 from os import system
 import time
+from pynput.keyboard import Key
 from pynput.mouse import Button
 
 from werkzeug.utils import redirect
@@ -42,6 +43,6 @@ def netflix(cmd):
         time.sleep(0.2)
         mouse.click(Button.left)
     elif cmd == 'pause':
-        keyboard.press('space')
-        keyboard.release('space')
+        keyboard.press(Key.space)
+        keyboard.release(Key.space)
     return redirect(url_for('mainpage'))
