@@ -4,6 +4,7 @@ from flask.helpers import url_for
 from flask.templating import render_template
 from werkzeug.utils import redirect, secure_filename
 from datetime import datetime
+from glob import glob
 
 plugin_name = 'system'
 bp = Blueprint(plugin_name, __name__, template_folder='templates')
@@ -16,55 +17,75 @@ tile = f"""dict(
             ),
         )"""
 
+
+def clear_share_folder():
+    # könnte man auch nur UPLOADS machen. Sinnvoll?
+    for file in glob('./static/share/*'):
+        try:
+            remove(file)
+        except:
+            pass
+
+
 UPLOADS = []
+clear_share_folder()
 
 
 @bp.route('/system/<cmd>', methods=['GET', 'POST'])
 def system(cmd):
     import os
+
     if cmd == 'shutdown':
         remove('lockfile')
+        clear_share_folder()
         os.system('shutdown -s -t 10')
     if cmd == 'restart':
         remove('lockfile')
+        clear_share_folder()
         os.system('shutdown -r -t 00')
     elif cmd == 'cancel':
         open('lockfile', 'w').close()
         os.system('shutdown -a')
     elif cmd == 'speedtest':
         import speedtest
+
         s = speedtest.Speedtest()
         flash(f'down: {s.download() / 1e6:.2f} mbit')
         flash(f'up: {s.upload() / 1e6:.2f} mbit')
     elif cmd == 'upload':
         file = request.files['file']
         filename_orig = file.filename
-        filename_save = datetime.now().strftime(
-            '%Y%m%d%H%M%S') + '_' + filename_orig
+        filename_save = datetime.now().strftime('%Y%m%d%H%M%S') + '_' + filename_orig
         filename_save = secure_filename(filename_save)
-        file.save(f'./static/{filename_save}')
-        UPLOADS.append((filename_orig, filename_save))
+        file.save(f'./static/share/{filename_save}')
+        UPLOADS.append((filename_orig, filename_save, datetime.now()))
     elif cmd == 'download':
-        return send_from_directory('./static',
-                                   UPLOADS[-1][1],
-                                   as_attachment=True,
-                                   attachment_filename=UPLOADS[-1][0])
+        return send_from_directory(
+            './static/share',
+            UPLOADS[-1][1],
+            as_attachment=True,
+            attachment_filename=UPLOADS[-1][0],
+        )
 
     return redirect(url_for('mainpage'))
 
 
 @bp.route('/system')
 def system_more():
-    tiles = dict(__10235=url_for('mainpage'),
-                 speedtest=url_for(f'{plugin_name}.system', cmd='speedtest'),
-                 restart=url_for(f'{plugin_name}.system', cmd='restart'),
-                 share=dict(share=dict(
-                     send='#',
-                     receive=url_for(f'{plugin_name}.system', cmd='download'),
-                 )))
-    return render_template('scaffold.jinja2',
-                           tiles=tiles,
-                           additional_footer=additional_footer)
+    tiles = dict(
+        __10235=url_for('mainpage'),
+        speedtest=url_for(f'{plugin_name}.system', cmd='speedtest'),
+        restart=url_for(f'{plugin_name}.system', cmd='restart'),
+        share=dict(
+            share=dict(
+                send='#',
+                receive=url_for(f'{plugin_name}.system', cmd='download'),
+            )
+        ),
+    )
+    return render_template(
+        'scaffold.jinja2', tiles=tiles, additional_footer=additional_footer
+    )
 
 
 additional_footer = """
