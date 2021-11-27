@@ -61,7 +61,8 @@ def ender(cmd):
         print(e)
         print('reloading octoprint')
         reload(octoprint)
-    return redirect(url_for('mainpage'))
+    # return redirect(url_for('mainpage'))
+    return redirect(url_for('{plugin_name}.ender_more'))
 
 
 @bp.route('/ender')
