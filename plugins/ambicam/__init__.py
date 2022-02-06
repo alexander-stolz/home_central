@@ -33,7 +33,7 @@ def stop():
 
 @bp.route('/ambicam_color/<cmd>')
 def ambicam_color(cmd):
-    urllib.request.urlopen(f'http://{config["host"]}:{config["port"]}/color/{cmd}')
+    urllib.request.urlopen(f'http://{config["host"]}:{config["port"]}/colors/{cmd}')
     return redirect(url_for(f'{plugin_name}.ambicam_more'))
 
 
