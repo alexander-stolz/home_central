@@ -10,13 +10,15 @@ tile = f"""dict(
             ambilight=dict(
                 __default='#',
                 __127752=url_for('{plugin_name}.set_prismatik_profile', name='colour'),
-                __128250=url_for('{plugin_name}.set_prismatik_profile', name='normal'),
+                __128250=url_for('{plugin_name}.set_prismatik_profile', name='TV'),
             ),
         )"""
+
 
 @bp.route('/prismatik/profile/<name>')
 def set_prismatik_profile(name='colour'):
     import telnetlib
+
     with telnetlib.Telnet('192.168.1.108', '3636') as tn:
         tn.write(b'lock\n')
         tn.write(f'setprofile:{name}\n'.encode())
