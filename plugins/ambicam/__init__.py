@@ -9,7 +9,7 @@ bp = Blueprint(plugin_name, __name__)
 
 tile = f"""dict(
             ambicam=dict(
-                __default='{url_for(f'{plugin_name}.ambicam_more')}',
+                __default=url_for('{plugin_name}.ambicam_more'),
                 start=url_for('{plugin_name}.start'),
                 stop=url_for('{plugin_name}.stop'),
             ),
